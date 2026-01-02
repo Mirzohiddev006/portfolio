@@ -1,35 +1,52 @@
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
 const skillsData = [
-  { name: 'React', level: 95, category: 'frontend' },
-  { name: 'TypeScript', level: 90, category: 'frontend' },
-  { name: 'JavaScript', level: 95, category: 'frontend' },
-  { name: 'Next.js', level: 85, category: 'frontend' },
-  { name: 'Three.js', level: 75, category: 'frontend' },
-  { name: 'Tailwind CSS', level: 90, category: 'frontend' },
-  { name: 'Node.js', level: 80, category: 'backend' },
-  { name: 'PostgreSQL', level: 75, category: 'backend' },
-  { name: 'GraphQL', level: 70, category: 'backend' },
-  { name: 'REST APIs', level: 90, category: 'backend' },
-  { name: 'Git', level: 85, category: 'tools' },
-  { name: 'Docker', level: 65, category: 'tools' },
-  { name: 'AWS', level: 60, category: 'tools' },
-  { name: 'Figma', level: 80, category: 'tools' },
+  { name: "React", level: 95, category: "frontend" },
+  { name: "TypeScript", level: 90, category: "frontend" },
+  { name: "JavaScript", level: 95, category: "frontend" },
+  { name: "Next.js", level: 85, category: "frontend" },
+  { name: "Three.js", level: 75, category: "frontend" },
+  { name: "Tailwind CSS", level: 90, category: "frontend" },
+  { name: "Node.js", level: 80, category: "frontend" },
+  { name: "HTML", level: 95, category: "frontend" },
+  { name: "CSS", level: 95, category: "frontend" },
+  { name: "Git", level: 85, category: "tools" },
+  { name: "Docker", level: 65, category: "tools" },
+  { name: "AWS", level: 60, category: "tools" },
+  { name: "Figma", level: 80, category: "tools" },
 ];
 
 const skillCategories = [
-  { title: 'Frontend', color: '#00ff41', skills: ['React', 'TypeScript', 'JavaScript', 'Next.js', 'Three.js', 'Tailwind CSS'] },
-  { title: 'Backend', color: '#00ffff', skills: ['Node.js', 'PostgreSQL', 'GraphQL', 'REST APIs'] },
-  { title: 'Tools & Others', color: '#ff00ff', skills: ['Git', 'Docker', 'AWS', 'Figma'] },
+  {
+    title: "Frontend",
+    color: "#00ff41",
+    skills: [
+      "React",
+      "TypeScript",
+      "JavaScript",
+      "Next.js",
+      "Three.js",
+      "Tailwind CSS",
+    ],
+  },
+  {
+    title: "Tools & Others",
+    color: "#ff00ff",
+    skills: ["Git", "Docker", "AWS", "Figma"],
+  },
 ];
 
 const Skills = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section id="skills" ref={sectionRef} className="relative py-32 px-4 overflow-hidden">
+    <section
+      id="skills"
+      ref={sectionRef}
+      className="relative py-32 px-4 overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -38,8 +55,13 @@ const Skills = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="font-mono text-sm text-[#00ff41] tracking-widest">02. // EXPERTISE</span>
-          <h2 className="font-display text-4xl md:text-5xl text-white mt-4" style={{ textShadow: '0 0 10px #00ff41' }}>
+          <span className="font-mono text-sm text-[#00ff41] tracking-widest">
+            02. // EXPERTISE
+          </span>
+          <h2
+            className="font-display text-4xl md:text-5xl text-white mt-4"
+            style={{ textShadow: "0 0 10px #00ff41" }}
+          >
             SKILLS & TECHNOLOGIES
           </h2>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#00ff41] to-transparent mx-auto mt-6" />
@@ -54,7 +76,10 @@ const Skills = () => {
               transition={{ duration: 0.6, delay: categoryIndex * 0.2 }}
               className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-6 rounded-xl hover:border-[#00ff41]/30 transition-all duration-300"
             >
-              <h3 className="font-display text-xl mb-6 tracking-wider" style={{ color: category.color }}>
+              <h3
+                className="font-display text-xl mb-6 tracking-wider"
+                style={{ color: category.color }}
+              >
                 {category.title}
               </h3>
               <div className="space-y-4">
@@ -65,14 +90,25 @@ const Skills = () => {
                   return (
                     <div key={skillName}>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="font-mono text-sm text-gray-300">{skill.name}</span>
-                        <span className="font-mono text-xs" style={{ color: category.color }}>{skill.level}%</span>
+                        <span className="font-mono text-sm text-gray-300">
+                          {skill.name}
+                        </span>
+                        <span
+                          className="font-mono text-xs"
+                          style={{ color: category.color }}
+                        >
+                          {skill.level}%
+                        </span>
                       </div>
                       <div className="h-2 bg-[#0f0f0f] rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={isInView ? { width: `${skill.level}%` } : {}}
-                          transition={{ duration: 1, delay: 0.5 + categoryIndex * 0.2 + skillIndex * 0.05 }}
+                          transition={{
+                            duration: 1,
+                            delay:
+                              0.5 + categoryIndex * 0.2 + skillIndex * 0.05,
+                          }}
                           className="h-full rounded-full"
                           style={{
                             background: `linear-gradient(to right, ${category.color}, ${category.color}80)`,
@@ -98,8 +134,12 @@ const Skills = () => {
           <div className="flex items-center gap-4 px-6 py-3 bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/20 rounded-lg">
             <span className="text-2xl">🚀</span>
             <div>
-              <p className="font-mono text-sm text-gray-400">Always learning and exploring new technologies</p>
-              <p className="font-mono text-xs text-[#00ff41]/60 mt-1">// Currently diving into: AI/ML, WebGPU, Rust</p>
+              <p className="font-mono text-sm text-gray-400">
+                Always learning and exploring new technologies
+              </p>
+              <p className="font-mono text-xs text-[#00ff41]/60 mt-1">
+                // Currently diving into: AI/ML, WebGPU, Rust
+              </p>
             </div>
           </div>
         </motion.div>
