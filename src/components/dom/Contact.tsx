@@ -94,6 +94,7 @@ const Contact = () => {
         status: error?.status,
         text: error?.text,
         message: error?.message,
+        errorMessage,
       });
 
       setSubmitStatus("error");
