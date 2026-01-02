@@ -3,6 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import emailjs from "@emailjs/browser";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -32,12 +33,69 @@ const Contact = () => {
 
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
+    setSubmitStatus("idle");
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log("Form data:", data);
+      // EmailJS configuration - get these from https://www.emailjs.com/
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error(
+          "EmailJS configuration is missing. Please set up environment variables."
+        );
+      }
+
+      // Prepare template parameters
+      // Note: Template variable names must match exactly what's in your EmailJS template
+      // Common names: name, email, subject, message, title, etc.
+      const templateParams = {
+        name: data.name, // Template'da {{name}} bo'lsa
+        from_name: data.name, // Template'da {{from_name}} bo'lsa
+        email: data.email, // Template'da {{email}} bo'lsa
+        from_email: data.email, // Template'da {{from_email}} bo'lsa
+        subject: data.subject, // Template'da {{subject}} bo'lsa
+        title: data.subject, // Template'da {{title}} bo'lsa
+        message: data.message, // Template'da {{message}} bo'lsa
+        to_email: "ibrohimjonovm2006@gmail.com",
+      };
+
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
+      );
+
+      console.log("Email sent successfully:", response);
       setSubmitStatus("success");
       reset();
-    } catch {
+    } catch (error: any) {
+      console.error("Email sending error:", error);
+
+      // More detailed error handling
+      let errorMessage = "Error sending message. Please try again.";
+
+      if (error?.status === 400) {
+        errorMessage =
+          "Invalid template parameters. Please check your EmailJS template configuration.";
+      } else if (error?.status === 401) {
+        errorMessage = "Unauthorized. Please check your EmailJS Public Key.";
+      } else if (error?.status === 404) {
+        errorMessage =
+          "Service or Template not found. Please check your EmailJS IDs.";
+      } else if (error?.text) {
+        errorMessage = `Error: ${error.text}`;
+      }
+
+      console.error("Error details:", {
+        status: error?.status,
+        text: error?.text,
+        message: error?.message,
+      });
+
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -49,109 +107,109 @@ const Contact = () => {
     <section
       id="contact"
       ref={sectionRef}
-      className="relative py-32 px-4 overflow-hidden"
+      className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-3 sm:px-4 md:px-6 overflow-hidden"
     >
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <span className="font-mono text-sm text-[#00ff41] tracking-widest">
+          <span className="font-mono text-xs sm:text-sm text-[#00ff41] tracking-wider sm:tracking-widest">
             05. // GET IN TOUCH
           </span>
           <h2
-            className="font-display text-4xl md:text-5xl text-white mt-4"
+            className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
             style={{ textShadow: "0 0 10px #00ff41" }}
           >
             CONTACT ME
           </h2>
-          <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#00ff41] to-transparent mx-auto mt-6" />
-          <p className="font-body text-gray-400 mt-6 max-w-2xl mx-auto">
+          <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-transparent via-[#00ff41] to-transparent mx-auto mt-3 sm:mt-4 md:mt-6" />
+          <p className="font-body text-gray-400 text-sm sm:text-base mt-4 sm:mt-5 md:mt-6 max-w-2xl mx-auto px-4">
             Have a project in mind? Feel free to reach out.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12">
           <motion.form
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
             onSubmit={handleSubmit(onSubmit)}
-            className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-8 rounded-xl space-y-6"
+            className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl space-y-4 sm:space-y-5 md:space-y-6"
           >
             <div>
-              <label className="block font-mono text-sm text-[#00ff41] mb-2">
+              <label className="block font-mono text-xs sm:text-sm text-[#00ff41] mb-1.5 sm:mb-2">
                 // NAME
               </label>
               <input
                 {...register("name")}
                 type="text"
                 placeholder="Your Name"
-                className={`w-full px-4 py-3 bg-black/50 border ${
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/50 border ${
                   errors.name ? "border-red-500" : "border-[#00ff41]/30"
-                } rounded-lg font-body text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all`}
+                } rounded-lg font-body text-sm sm:text-base text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all`}
               />
               {errors.name && (
-                <p className="mt-1 font-mono text-xs text-red-400">
+                <p className="mt-1 font-mono text-[10px] xs:text-xs text-red-400">
                   {errors.name.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block font-mono text-sm text-[#00ff41] mb-2">
+              <label className="block font-mono text-xs sm:text-sm text-[#00ff41] mb-1.5 sm:mb-2">
                 // EMAIL
               </label>
               <input
                 {...register("email")}
                 type="email"
                 placeholder="your@email.com"
-                className={`w-full px-4 py-3 bg-black/50 border ${
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/50 border ${
                   errors.email ? "border-red-500" : "border-[#00ff41]/30"
-                } rounded-lg font-body text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all`}
+                } rounded-lg font-body text-sm sm:text-base text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all`}
               />
               {errors.email && (
-                <p className="mt-1 font-mono text-xs text-red-400">
+                <p className="mt-1 font-mono text-[10px] xs:text-xs text-red-400">
                   {errors.email.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block font-mono text-sm text-[#00ff41] mb-2">
+              <label className="block font-mono text-xs sm:text-sm text-[#00ff41] mb-1.5 sm:mb-2">
                 // SUBJECT
               </label>
               <input
                 {...register("subject")}
                 type="text"
                 placeholder="Project Inquiry"
-                className={`w-full px-4 py-3 bg-black/50 border ${
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/50 border ${
                   errors.subject ? "border-red-500" : "border-[#00ff41]/30"
-                } rounded-lg font-body text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all`}
+                } rounded-lg font-body text-sm sm:text-base text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all`}
               />
               {errors.subject && (
-                <p className="mt-1 font-mono text-xs text-red-400">
+                <p className="mt-1 font-mono text-[10px] xs:text-xs text-red-400">
                   {errors.subject.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block font-mono text-sm text-[#00ff41] mb-2">
+              <label className="block font-mono text-xs sm:text-sm text-[#00ff41] mb-1.5 sm:mb-2">
                 // MESSAGE
               </label>
               <textarea
                 {...register("message")}
                 rows={5}
                 placeholder="Tell me about your project..."
-                className={`w-full px-4 py-3 bg-black/50 border ${
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/50 border ${
                   errors.message ? "border-red-500" : "border-[#00ff41]/30"
-                } rounded-lg font-body text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all resize-none`}
+                } rounded-lg font-body text-sm sm:text-base text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all resize-none`}
               />
               {errors.message && (
-                <p className="mt-1 font-mono text-xs text-red-400">
+                <p className="mt-1 font-mono text-[10px] xs:text-xs text-red-400">
                   {errors.message.message}
                 </p>
               )}
@@ -162,7 +220,7 @@ const Contact = () => {
               disabled={isSubmitting}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`w-full py-4 font-mono text-sm tracking-wider border rounded-lg transition-all ${
+              className={`w-full py-3 sm:py-4 font-mono text-xs sm:text-sm tracking-wider border rounded-lg transition-all ${
                 isSubmitting
                   ? "border-gray-500 text-gray-500"
                   : "border-[#00ff41] text-[#00ff41] hover:bg-[#00ff41]/10 hover:shadow-[0_0_20px_rgba(0,255,65,0.3)]"
@@ -172,12 +230,12 @@ const Contact = () => {
             </motion.button>
 
             {submitStatus === "success" && (
-              <p className="text-center font-mono text-sm text-[#00ff41]">
+              <p className="text-center font-mono text-xs sm:text-sm text-[#00ff41]">
                 ✓ Message sent!
               </p>
             )}
             {submitStatus === "error" && (
-              <p className="text-center font-mono text-sm text-red-400">
+              <p className="text-center font-mono text-xs sm:text-sm text-red-400">
                 ✗ Error. Try again.
               </p>
             )}
@@ -187,55 +245,65 @@ const Contact = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="space-y-8"
+            className="space-y-6 sm:space-y-8"
           >
-            <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-8 rounded-xl">
-              <h3 className="font-display text-2xl text-white mb-6">
+            <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl">
+              <h3 className="font-display text-xl sm:text-2xl text-white mb-4 sm:mb-5 md:mb-6">
                 LET'S BUILD SOMETHING{" "}
                 <span className="text-[#00ff41]">AMAZING</span>
               </h3>
-              <p className="font-body text-gray-400 mb-8">
+              <p className="font-body text-gray-400 text-sm sm:text-base mb-6 sm:mb-7 md:mb-8">
                 I'm available for freelance work and full-time opportunities.
               </p>
 
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 flex items-center justify-center border border-[#00ff41]/30 rounded-lg text-[#00ff41]">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border border-[#00ff41]/30 rounded-lg text-[#00ff41] text-sm sm:text-base">
                     📍
                   </div>
                   <div>
-                    <p className="font-mono text-xs text-gray-500">LOCATION</p>
-                    <p className="font-body text-white">Tashkent, Uzbekistan</p>
+                    <p className="font-mono text-[10px] xs:text-xs text-gray-500">
+                      LOCATION
+                    </p>
+                    <p className="font-body text-white text-sm sm:text-base">
+                      Tashkent, Uzbekistan
+                    </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 flex items-center justify-center border border-[#00ff41]/30 rounded-lg text-[#00ff41]">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border border-[#00ff41]/30 rounded-lg text-[#00ff41] text-sm sm:text-base">
                     ✉️
                   </div>
                   <div>
-                    <p className="font-mono text-xs text-gray-500">EMAIL</p>
-                    <p className="font-body text-white">
+                    <p className="font-mono text-[10px] xs:text-xs text-gray-500">
+                      EMAIL
+                    </p>
+                    <p className="font-body text-white text-xs sm:text-sm md:text-base break-all">
                       ibrohimjonovm2006@gmail.com
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 flex items-center justify-center border border-[#00ff41]/30 rounded-lg text-[#00ff41]">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border border-[#00ff41]/30 rounded-lg text-[#00ff41] text-sm sm:text-base">
                     🕐
                   </div>
                   <div>
-                    <p className="font-mono text-xs text-gray-500">TIMEZONE</p>
-                    <p className="font-body text-white">GMT+5 (Uzbekistan)</p>
+                    <p className="font-mono text-[10px] xs:text-xs text-gray-500">
+                      TIMEZONE
+                    </p>
+                    <p className="font-body text-white text-sm sm:text-base">
+                      GMT+5 (Uzbekistan)
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-8 rounded-xl">
-              <h4 className="font-mono text-sm text-[#00ff41] mb-6">
+            <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl">
+              <h4 className="font-mono text-xs sm:text-sm text-[#00ff41] mb-4 sm:mb-5 md:mb-6">
                 // CONNECT WITH ME
               </h4>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4">
                 {[
                   { name: "GitHub", url: "https://github.com/Mirzohiddev006" },
                   {
@@ -254,7 +322,7 @@ const Contact = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, y: -5 }}
-                    className="px-4 py-2 border border-[#00ff41]/30 rounded-lg text-gray-400 hover:text-[#00ff41] hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.3)] transition-all font-mono text-sm"
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 border border-[#00ff41]/30 rounded-lg text-gray-400 hover:text-[#00ff41] hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.3)] transition-all font-mono text-xs sm:text-sm"
                   >
                     {social.name}
                   </motion.a>
@@ -263,15 +331,15 @@ const Contact = () => {
             </div>
 
             <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 rounded-xl overflow-hidden">
-              <div className="flex items-center gap-2 px-4 py-2 bg-[#0f0f0f] border-b border-[#00ff41]/10">
-                <span className="w-3 h-3 rounded-full bg-red-500/80" />
-                <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <span className="w-3 h-3 rounded-full bg-green-500/80" />
-                <span className="ml-4 font-mono text-xs text-gray-500">
+              <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#0f0f0f] border-b border-[#00ff41]/10">
+                <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-red-500/80" />
+                <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-yellow-500/80" />
+                <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-green-500/80" />
+                <span className="ml-2 sm:ml-4 font-mono text-[10px] xs:text-xs text-gray-500">
                   terminal
                 </span>
               </div>
-              <div className="p-4 font-mono text-sm">
+              <div className="p-3 sm:p-4 font-mono text-xs sm:text-sm">
                 <p className="text-gray-500">$ contact --status</p>
                 <p className="text-[#00ff41] mt-1">
                   ✓ Online and ready to collaborate

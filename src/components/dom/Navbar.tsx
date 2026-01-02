@@ -57,21 +57,21 @@ const Navbar = () => {
         }`}
         style={{ borderBottom: scrolled ? '1px solid rgba(0, 255, 65, 0.1)' : 'none' }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <motion.a
               href="#hero"
               onClick={(e) => { e.preventDefault(); handleNavClick('#hero'); }}
               whileHover={{ scale: 1.05 }}
-              className="font-display text-xl md:text-2xl text-[#00ff41] tracking-widest"
+              className="font-display text-lg sm:text-xl md:text-2xl text-[#00ff41] tracking-wide sm:tracking-widest"
               style={{ textShadow: '0 0 10px #00ff41' }}
             >
               &lt;DEV/&gt;
             </motion.a>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-4 lg:space-x-6 xl:space-x-8">
               {navLinks.map((link, index) => (
                 <motion.a
                   key={link.href}
@@ -80,14 +80,14 @@ const Navbar = () => {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * index }}
-                  className={`relative font-mono text-sm tracking-wider transition-colors duration-300 ${
+                  className={`relative font-mono text-xs lg:text-sm tracking-wide lg:tracking-wider transition-colors duration-300 ${
                     activeSection === link.href.slice(1)
                       ? 'text-[#00ff41]'
                       : 'text-gray-400 hover:text-[#00ff41]'
                   }`}
                   style={activeSection === link.href.slice(1) ? { textShadow: '0 0 5px #00ff41' } : {}}
                 >
-                  <span className="text-[#00ff41]/50 mr-1">0{index + 1}.</span>
+                  <span className="text-[#00ff41]/50 mr-0.5 lg:mr-1">0{index + 1}.</span>
                   {link.label}
                   {activeSection === link.href.slice(1) && (
                     <motion.span
@@ -147,7 +147,7 @@ const Navbar = () => {
               className="absolute right-0 top-0 bottom-0 w-4/5 max-w-sm bg-[#0a0a0a]/95 backdrop-blur-lg border-l border-[#00ff41]/20 flex flex-col"
             >
               <div className="h-20" />
-              <div className="flex-1 flex flex-col justify-center px-8 space-y-6">
+              <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 md:px-8 space-y-4 sm:space-y-5 md:space-y-6">
                 {navLinks.map((link, index) => (
                   <motion.a
                     key={link.href}
@@ -156,11 +156,11 @@ const Navbar = () => {
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 * index }}
-                    className={`font-mono text-lg tracking-wider ${
+                    className={`font-mono text-base sm:text-lg tracking-wider ${
                       activeSection === link.href.slice(1) ? 'text-[#00ff41]' : 'text-gray-400'
                     }`}
                   >
-                    <span className="text-[#00ff41]/50 mr-3">0{index + 1}.</span>
+                    <span className="text-[#00ff41]/50 mr-2 sm:mr-3">0{index + 1}.</span>
                     {link.label}
                   </motion.a>
                 ))}
