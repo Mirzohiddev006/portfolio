@@ -12,10 +12,71 @@ interface Project {
   title: string;
   description: string;
   technologies: string[];
+  image?: string;
   featured?: boolean;
 }
 
 const projects: Project[] = [
+  {
+    id: "365-crm",
+    title: "365 Magazine Sales CRM",
+    description:
+      "A full-featured sales management dashboard with role-based access for operators and admins, real-time operator queue panel with WebSocket integration, client and order management, Telegram broadcast functionality, PDF channel tracking, subscription plan management, and analytics dashboard with visual KPIs.",
+    technologies: [
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Radix UI",
+      "React Hook Form",
+      "Zod",
+      "WebSocket",
+    ],
+    image: "/images/projects/365-crm.png",
+    featured: true,
+  },
+  {
+    id: "kas-crm",
+    title: "KAS CRM",
+    description:
+      "Admin panel frontend for KAS CRM built with React, TypeScript, and Tailwind CSS. Features lead, chat, product, store, user, and AI settings management with a responsive dashboard. Includes role-based access control, React Query for server state, Zustand for client state, token-based authentication with refresh mechanism, and full CRUD operations with bulk import support.",
+    technologies: [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "React Query",
+      "Zustand",
+      "Axios",
+      "Zod",
+    ],
+    image: "/images/projects/kas-crm.png",
+    featured: true,
+  },
+  {
+    id: "cognilabs-cims",
+    title: "CogniLabs CIMS",
+    description:
+      "Comprehensive internal management system featuring CEO dashboard, CRM client panel, user & permission management, team updates monitoring, salary estimates, project management with drag-and-drop Kanban board, and an AI chat interface. Supports role-based auth, protected routes, light/dark theme, responsive layout, and uz/en/ru internationalization.",
+    technologies: [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "i18n",
+      "Drag & Drop",
+    ],
+    image: "/images/projects/cognilabs-cims.png",
+    featured: true,
+  },
+  {
+    id: "evoting",
+    title: "EVoting",
+    description:
+      "Electronic voting system frontend where users can register, vote on active polls, and track results with real-time visual charts. Admin panel enables poll management, user monitoring, result analysis, and PDF export functionality.",
+    technologies: ["React", "TypeScript", "Vite", "Tailwind CSS"],
+    image: "/images/projects/evoting.png",
+    featured: true,
+  },
   {
     id: "1",
     title: "Football Club Management System",
@@ -46,7 +107,6 @@ const projects: Project[] = [
       "Beautiful weather dashboard with animated visualizations, forecasts, and location-based data. But now it's not working because the API is no longer available.",
     technologies: ["React", "JavaScript", "Tailwind CSS", "OpenWeather API", "HTML", "CSS"],
   },
-
   {
     id: "4",
     title: "University Club Management System",
@@ -111,17 +171,28 @@ const ProjectCard = ({
             : "border-[#00ff41]/10"
         }`}
       >
-        {/* Image placeholder */}
+        {/* Project Image */}
         <div className="relative h-40 sm:h-44 md:h-48 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#00ff41]/10 via-[#00ffff]/5 to-[#ff00ff]/10" />
-          <div
-            className="absolute inset-0 opacity-30"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px)",
-              backgroundSize: "20px 20px",
-            }}
-          />
+          {project.image ? (
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-br from-[#00ff41]/10 via-[#00ffff]/5 to-[#ff00ff]/10" />
+              <div
+                className="absolute inset-0 opacity-30"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px)",
+                  backgroundSize: "20px 20px",
+                }}
+              />
+            </>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60" />
 
           {project.featured && (
             <div className="absolute top-2 sm:top-3 md:top-4 right-2 sm:right-3 md:right-4 px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-[#00ff41]/20 border border-[#00ff41]/50 rounded-full">
@@ -135,7 +206,7 @@ const ProjectCard = ({
           <h3 className="font-display text-lg sm:text-xl text-white mb-1.5 sm:mb-2 group-hover:text-[#00ff41] transition-colors duration-300">
             {project.title}
           </h3>
-          <p className="font-body text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">
+          <p className="font-body text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-3">
             {project.description}
           </p>
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
