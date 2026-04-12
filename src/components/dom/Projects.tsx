@@ -70,10 +70,10 @@ const projects: Project[] = [
   },
   {
     id: "evoting",
-    title: "EVoting",
+    title: "EVote",
     description:
-      "Electronic voting system frontend where users can register, vote on active polls, and track results with real-time visual charts. Admin panel enables poll management, user monitoring, result analysis, and PDF export functionality.",
-    technologies: ["React", "TypeScript", "Vite", "Tailwind CSS"],
+      "Electronic voting platform with user registration, active poll participation, and real-time result tracking. Admin panel features KPI dashboard (total polls, active polls, users, votes), leading polls bar chart, status distribution donut chart, poll results table, role-based access (Superadmin/User), light/dark theme, and PDF export functionality.",
+    technologies: ["React", "TypeScript", "Vite", "Tailwind CSS", "Chart.js"],
     image: "/images/projects/evoting.png",
     featured: true,
   },
