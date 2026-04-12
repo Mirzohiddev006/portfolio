@@ -309,7 +309,7 @@ const Contact = () => {
                   { name: "GitHub", url: "https://github.com/Mirzohiddev006" },
                   {
                     name: "LinkedIn",
-                    url: "www.linkedin.com/in/mirzohid-ibrohimjonov",
+                    url: "https://www.linkedin.com/in/mirzohid-ibrohimjonov",
                   },
                   { name: "Telegram", url: "https://t.me/Mirzohid_006_09_09" },
                   {

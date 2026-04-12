@@ -97,16 +97,8 @@ const projects: Project[] = [
     id: "2",
     title: "3D Portfolio Experience",
     description:
-      "Immersive neo-futuristic portfolio website with WebGL-powered 3D scenes, interactive particle systems, mouse-tracked animations, glowing neon aesthetics, typewriter effects, and smooth scroll-based section transitions. Built with a cyberpunk design language.",
-    technologies: [
-      "React",
-      "TypeScript",
-      "Three.js",
-      "Framer Motion",
-      "GSAP",
-      "Tailwind CSS",
-    ],
-    image: "/images/projects/portfolio-3d.png",
+      "Immersive neo-futuristic portfolio website with WebGL, 3D animations, and interactive particle systems.",
+    technologies: ["React", "Three.js", "Framer Motion", "GSAP"],
     featured: true,
   },
   {
