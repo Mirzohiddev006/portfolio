@@ -79,17 +79,18 @@ const projects: Project[] = [
   },
   {
     id: "1",
-    title: "Football Club Management System",
+    title: "Bunyodkor Academy CIMS",
     description:
-      "Full-featured management system for Football Club with real-time dashboards, JWT authentication, and comprehensive player/staff management.",
+      "Full-featured Club Information Management System for Bunyodkor Football Academy with real-time revenue dashboards, student management (1,500+ active students), payment tracking with multiple sources (Bank, Click, Payme, Manual), attendance logs, coach panels, group/contract management, and comprehensive financial analytics. Built with JWT authentication and role-based access.",
     technologies: [
       "React",
       "JavaScript",
       "Tailwind CSS",
       "Node.js",
-      "HTML",
-      "CSS",
+      "JWT",
+      "Chart.js",
     ],
+    image: "/images/projects/bunyodkor-academy.png",
     featured: true,
   },
   {
