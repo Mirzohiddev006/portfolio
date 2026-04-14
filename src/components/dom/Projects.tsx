@@ -16,7 +16,7 @@ interface Project {
   featured?: boolean;
 }
 
-const projects: Project[] = [
+export const projects: Project[] = [
   {
     id: "365-crm",
     title: "365 Magazine Sales CRM",

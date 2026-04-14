@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { projects } from "./Projects";
 
 const stats = [
   { value: "1+", label: "Years Experience" },
-  { value: "3+", label: "Projects Completed" },
+  { value: `${projects.length}+`, label: "Projects Completed" },
   { value: "10+", label: "Technologies" },
   { value: "100%", label: "Client Satisfaction" },
 ];
