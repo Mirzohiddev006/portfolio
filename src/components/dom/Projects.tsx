@@ -16,7 +16,7 @@ interface Project {
   featured?: boolean;
 }
 
-const projects: Project[] = [
+export const projects: Project[] = [
   {
     id: "365-crm",
     title: "365 Magazine Sales CRM",
@@ -216,7 +216,7 @@ const ProjectCard = ({
           <h3 className="font-display text-lg sm:text-xl text-white mb-1.5 sm:mb-2 group-hover:text-[#00ff41] transition-colors duration-300">
             {project.title}
           </h3>
-          <p className="font-body text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-3">
+          <p className="font-body text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 sm:line-clamp-3">
             {project.description}
           </p>
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
