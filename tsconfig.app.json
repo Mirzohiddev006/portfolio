@@ -5,7 +5,9 @@
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "types": ["vite/client"],
+    // Removed explicit vite type reference to avoid missing type definition error
+    // If you need vite types, install them with: npm i -D vite
+    
     "skipLibCheck": true,
 
     /* Bundler mode */
