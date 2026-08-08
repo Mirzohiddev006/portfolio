@@ -1,4 +1,7 @@
-import { contactSchema } from "../src/lib/contactSchema";
+// The .js extension is required: package.json sets "type": "module", so Vercel
+// type-checks this function with node16 module resolution. TypeScript maps the
+// specifier back to contactSchema.ts.
+import { contactSchema } from "../src/lib/contactSchema.js";
 
 export const config = { runtime: "edge" };
 
