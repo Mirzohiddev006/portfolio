@@ -2,6 +2,32 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Contact form → Telegram
+
+The contact form posts to `api/contact.ts`, a Vercel Edge Function that forwards
+the message to a Telegram bot. The bot token never reaches the browser.
+
+### Setup
+
+1. Open [@BotFather](https://t.me/BotFather) on Telegram, run `/newbot`, and copy
+   the token it returns.
+2. Send your new bot any message, then open
+   `https://api.telegram.org/bot<TOKEN>/getUpdates` and copy `message.chat.id`.
+3. Local development — copy `.env.example` to `.env` and fill in both values:
+
+   ```
+   TELEGRAM_BOT_TOKEN=...
+   TELEGRAM_CHAT_ID=...
+   ```
+
+   `npm run dev` mounts the same handler on the Vite dev server, so the form
+   works locally without `vercel dev`.
+4. Production — add `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` under
+   **Vercel → Project → Settings → Environment Variables**, then redeploy.
+
+`.env` is git-ignored. Do not prefix these variables with `VITE_` — Vite inlines
+every `VITE_*` variable into the public client bundle.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh

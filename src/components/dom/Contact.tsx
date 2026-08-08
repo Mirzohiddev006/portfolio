@@ -2,17 +2,9 @@ import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import emailjs from "@emailjs/browser";
+import { contactSchema, type ContactFormData } from "../../lib/contactSchema";
 
-const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email"),
-  subject: z.string().min(5, "Subject must be at least 5 characters"),
-  message: z.string().min(20, "Message must be at least 20 characters"),
-});
-
-type ContactFormData = z.infer<typeof contactSchema>;
+const TELEGRAM_USERNAME = "Mirzohid_006_09_09";
 
 const Contact = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -21,6 +13,7 @@ const Contact = () => {
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
@@ -34,69 +27,32 @@ const Contact = () => {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
     setSubmitStatus("idle");
+    setErrorMessage("");
 
     try {
-      // EmailJS configuration - get these from https://www.emailjs.com/
-      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error(
-          "EmailJS configuration is missing. Please set up environment variables."
-        );
-      }
-
-      // Prepare template parameters
-      // Note: Template variable names must match exactly what's in your EmailJS template
-      // Common names: name, email, subject, message, title, etc.
-      const templateParams = {
-        name: data.name, // Template'da {{name}} bo'lsa
-        from_name: data.name, // Template'da {{from_name}} bo'lsa
-        email: data.email, // Template'da {{email}} bo'lsa
-        from_email: data.email, // Template'da {{from_email}} bo'lsa
-        subject: data.subject, // Template'da {{subject}} bo'lsa
-        title: data.subject, // Template'da {{title}} bo'lsa
-        message: data.message, // Template'da {{message}} bo'lsa
-        to_email: "ibrohimjonovm2006@gmail.com",
-      };
-
-      // Send email using EmailJS
-      const response = await emailjs.send(
-        serviceId,
-        templateId,
-        templateParams,
-        publicKey
-      );
-
-      console.log("Email sent successfully:", response);
-      setSubmitStatus("success");
-      reset();
-    } catch (error: any) {
-      console.error("Email sending error:", error);
-
-      // More detailed error handling
-      let errorMessage = "Error sending message. Please try again.";
-
-      if (error?.status === 400) {
-        errorMessage =
-          "Invalid template parameters. Please check your EmailJS template configuration.";
-      } else if (error?.status === 401) {
-        errorMessage = "Unauthorized. Please check your EmailJS Public Key.";
-      } else if (error?.status === 404) {
-        errorMessage =
-          "Service or Template not found. Please check your EmailJS IDs.";
-      } else if (error?.text) {
-        errorMessage = `Error: ${error.text}`;
-      }
-
-      console.error("Error details:", {
-        status: error?.status,
-        text: error?.text,
-        message: error?.message,
-        errorMessage,
+      // The bot token lives only on the server, so the browser just posts
+      // the form to our own endpoint and lets it talk to Telegram.
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data),
       });
 
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error ?? "Message could not be delivered.");
+      }
+
+      setSubmitStatus("success");
+      reset();
+    } catch (error) {
+      console.error("Contact form error:", error);
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Error sending message. Please try again."
+      );
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -128,7 +84,8 @@ const Contact = () => {
           </h2>
           <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-transparent via-[#00ff41] to-transparent mx-auto mt-3 sm:mt-4 md:mt-6" />
           <p className="font-body text-gray-400 text-sm sm:text-base mt-4 sm:mt-5 md:mt-6 max-w-2xl mx-auto px-4">
-            Have a project in mind? Feel free to reach out.
+            Have a project in mind? Send it over — it lands straight in my
+            Telegram.
           </p>
         </motion.div>
 
@@ -216,6 +173,16 @@ const Contact = () => {
               )}
             </div>
 
+            {/* Honeypot: invisible to people, irresistible to spam bots. */}
+            <input
+              {...register("website")}
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="hidden"
+            />
+
             <motion.button
               type="submit"
               disabled={isSubmitting}
@@ -232,12 +199,12 @@ const Contact = () => {
 
             {submitStatus === "success" && (
               <p className="text-center font-mono text-xs sm:text-sm text-[#00ff41]">
-                ✓ Message sent!
+                ✓ Message delivered to my Telegram!
               </p>
             )}
             {submitStatus === "error" && (
               <p className="text-center font-mono text-xs sm:text-sm text-red-400">
-                ✗ Error. Try again.
+                ✗ {errorMessage || "Error. Try again."}
               </p>
             )}
           </motion.form>
@@ -286,6 +253,24 @@ const Contact = () => {
                 </div>
                 <div className="flex items-center gap-3 sm:gap-4">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border border-[#00ff41]/30 rounded-lg text-[#00ff41] text-sm sm:text-base">
+                    ✈️
+                  </div>
+                  <div>
+                    <p className="font-mono text-[10px] xs:text-xs text-gray-500">
+                      TELEGRAM
+                    </p>
+                    <a
+                      href={`https://t.me/${TELEGRAM_USERNAME}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-body text-white text-sm sm:text-base hover:text-[#00ff41] transition-colors"
+                    >
+                      @{TELEGRAM_USERNAME}
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border border-[#00ff41]/30 rounded-lg text-[#00ff41] text-sm sm:text-base">
                     🕐
                   </div>
                   <div>
@@ -311,7 +296,10 @@ const Contact = () => {
                     name: "LinkedIn",
                     url: "https://www.linkedin.com/in/mirzohid-ibrohimjonov",
                   },
-                  { name: "Telegram", url: "https://t.me/Mirzohid_006_09_09" },
+                  {
+                    name: "Telegram",
+                    url: `https://t.me/${TELEGRAM_USERNAME}`,
+                  },
                   {
                     name: "Instagram",
                     url: "https://www.instagram.com/mirzohid.006.09",
