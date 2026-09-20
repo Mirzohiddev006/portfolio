@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import { useLanguage } from "../../lib/LanguageContext";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema, type ContactFormData } from "../../lib/contactSchema";
@@ -9,6 +10,7 @@ const TELEGRAM_USERNAME = "Mirzohid_006_09_09";
 const Contact = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
@@ -80,7 +82,7 @@ const Contact = () => {
             className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
             style={{ textShadow: "0 0 10px #00ff41" }}
           >
-            CONTACT ME
+            {t.contact}
           </h2>
           <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-transparent via-[#00ff41] to-transparent mx-auto mt-3 sm:mt-4 md:mt-6" />
           <p className="font-body text-gray-400 text-sm sm:text-base mt-4 sm:mt-5 md:mt-6 max-w-2xl mx-auto px-4">
@@ -194,7 +196,7 @@ const Contact = () => {
                   : "border-[#00ff41] text-[#00ff41] hover:bg-[#00ff41]/10 hover:shadow-[0_0_20px_rgba(0,255,65,0.3)]"
               }`}
             >
-              {isSubmitting ? "TRANSMITTING..." : "[ SEND MESSAGE ]"}
+              {isSubmitting ? "TRANSMITTING..." : `[ ${t.send} ]`}
             </motion.button>
 
             {submitStatus === "success" && (

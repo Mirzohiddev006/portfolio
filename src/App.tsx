@@ -1,5 +1,6 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { LanguageProvider } from './lib/LanguageContext';
 
 // Lazy load components for better performance
 const SceneContainer = lazy(() => import('./components/canvas/SceneContainer'));
@@ -106,6 +107,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
+    <LanguageProvider>
     <div className="relative min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
       <AnimatePresence mode="wait">
         {isLoading ? (
@@ -152,6 +154,7 @@ function App() {
         )}
       </AnimatePresence>
     </div>
+    </LanguageProvider>
   );
 }
 

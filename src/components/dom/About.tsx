@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { useLanguage } from "../../lib/LanguageContext";
 import { projects } from "./Projects";
 
 const stats = [
@@ -23,6 +24,7 @@ const technologies = [
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const { t } = useLanguage();
 
   return (
     <section
@@ -39,13 +41,13 @@ const About = () => {
           className="text-center mb-8 sm:mb-12 md:mb-16"
         >
           <span className="font-mono text-xs sm:text-sm text-[#00ff41] tracking-wider sm:tracking-widest">
-            01. // ABOUT ME
+            01. // {t.about}
           </span>
           <h2
             className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
             style={{ textShadow: "0 0 10px #00ff41" }}
           >
-            WHO AM I?
+            {t.aboutTitle}
           </h2>
           <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-transparent via-[#00ff41] to-transparent mx-auto mt-3 sm:mt-4 md:mt-6" />
         </motion.div>

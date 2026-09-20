@@ -1,11 +1,13 @@
 import { useRef, useState } from "react";
 import {
   motion,
+  AnimatePresence,
   useInView,
   useMotionValue,
   useTransform,
   useSpring,
 } from "framer-motion";
+import { useLanguage } from "../../lib/LanguageContext";
 
 interface Project {
   id: string;
@@ -13,6 +15,8 @@ interface Project {
   description: string;
   technologies: string[];
   image?: string;
+  gallery?: string[];
+  highlights?: string[];
   featured?: boolean;
 }
 
@@ -32,6 +36,8 @@ export const projects: Project[] = [
       "WebSocket",
     ],
     image: "/images/projects/365-crm.png",
+    gallery: ["/images/projects/365-crm.png", "/images/projects/cognilabs-cims.png", "/images/projects/evoting.png"],
+    highlights: ["Role-based access and admin workflows", "Real-time WebSocket operator queue", "Analytics, PDF tracking and Telegram broadcasts"],
     featured: true,
   },
   {
@@ -50,6 +56,8 @@ export const projects: Project[] = [
       "Zod",
     ],
     image: "/images/projects/kas-crm.png",
+    gallery: ["/images/projects/kas-crm.png", "/images/projects/365-crm.png", "/images/projects/bunyodkor-academy.png"],
+    highlights: ["Lead, chat, product and store management", "Token refresh authentication", "Bulk import and full CRUD operations"],
     featured: true,
   },
   {
@@ -66,6 +74,8 @@ export const projects: Project[] = [
       "Drag & Drop",
     ],
     image: "/images/projects/cognilabs-cims.png",
+    gallery: ["/images/projects/cognilabs-cims.png", "/images/projects/365-crm.png", "/images/projects/evoting.png"],
+    highlights: ["CEO dashboard and CRM client panel", "Drag-and-drop Kanban project management", "Uzbek, English and Russian interface"],
     featured: true,
   },
   {
@@ -75,6 +85,8 @@ export const projects: Project[] = [
       "Electronic voting platform with user registration, active poll participation, and real-time result tracking. Admin panel features KPI dashboard (total polls, active polls, users, votes), leading polls bar chart, status distribution donut chart, poll results table, role-based access (Superadmin/User), light/dark theme, and PDF export functionality.",
     technologies: ["React", "TypeScript", "Vite", "Tailwind CSS", "Chart.js"],
     image: "/images/projects/evoting.png",
+    gallery: ["/images/projects/evoting.png", "/images/projects/365-crm.png", "/images/projects/kas-crm.png"],
+    highlights: ["Poll participation and live results", "KPI dashboard with charts", "Role-based admin and user access"],
     featured: true,
   },
   {
@@ -91,6 +103,8 @@ export const projects: Project[] = [
       "Chart.js",
     ],
     image: "/images/projects/bunyodkor-academy.png",
+    gallery: ["/images/projects/bunyodkor-academy.png", "/images/projects/cognilabs-cims.png", "/images/projects/365-crm.png"],
+    highlights: ["1,500+ active student management", "Payment, attendance and contract tracking", "Financial dashboards and coach panels"],
     featured: true,
   },
   {
@@ -127,12 +141,15 @@ export const projects: Project[] = [
 const ProjectCard = ({
   project,
   index,
+  onOpen,
 }: {
   project: Project;
   index: number;
+  onOpen: (project: Project) => void;
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const { t } = useLanguage();
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -164,6 +181,10 @@ const ProjectCard = ({
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
+      onClick={() => onOpen(project)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") onOpen(project); }}
       style={{
         rotateX: springRotateX,
         rotateY: springRotateY,
@@ -205,7 +226,7 @@ const ProjectCard = ({
           {project.featured && (
             <div className="absolute top-2 sm:top-3 md:top-4 right-2 sm:right-3 md:right-4 px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-[#00ff41]/20 border border-[#00ff41]/50 rounded-full">
               <span className="font-mono text-[10px] xs:text-xs text-[#00ff41]">
-                FEATURED
+                {t.featured}
               </span>
             </div>
           )}
@@ -229,6 +250,9 @@ const ProjectCard = ({
               </span>
             ))}
           </div>
+          <span className="mt-4 block font-mono text-xs text-[#00ff41] opacity-0 group-hover:opacity-100 transition-opacity">
+            {t.viewDetails}
+          </span>
         </div>
       </div>
     </motion.div>
@@ -238,6 +262,9 @@ const ProjectCard = ({
 const Projects = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeImage, setActiveImage] = useState(0);
+  const { t } = useLanguage();
 
   return (
     <section
@@ -254,28 +281,62 @@ const Projects = () => {
           className="text-center mb-8 sm:mb-12 md:mb-16"
         >
           <span className="font-mono text-xs sm:text-sm text-[#00ff41] tracking-wider sm:tracking-widest">
-            03. // PORTFOLIO
+            03. // {t.projects}
           </span>
           <h2
             className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
             style={{ textShadow: "0 0 10px #00ff41" }}
           >
-            FEATURED PROJECTS
+            {t.projects}
           </h2>
           <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-transparent via-[#00ff41] to-transparent mx-auto mt-3 sm:mt-4 md:mt-6" />
           <p className="font-body text-gray-400 text-sm sm:text-base mt-4 sm:mt-5 md:mt-6 max-w-2xl mx-auto px-4">
-            A showcase of my recent work, featuring web applications built with
-            modern technologies and a focus on exceptional user experience.
+            {t.projectIntro}
           </p>
         </motion.div>
 
         {/* Projects Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
           {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+            <ProjectCard key={project.id} project={project} index={index} onOpen={(item) => { setSelectedProject(item); setActiveImage(0); }} />
           ))}
         </div>
       </div>
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedProject(null)}>
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
+            <motion.div className="relative z-10 w-full max-w-5xl max-h-[92vh] overflow-y-auto bg-[#0a0a0a] border border-[#00ff41]/30 rounded-2xl shadow-[0_0_50px_rgba(0,255,65,0.2)]" initial={{ y: 30, scale: 0.96 }} animate={{ y: 0, scale: 1 }} onClick={(event) => event.stopPropagation()}>
+              <button onClick={() => setSelectedProject(null)} className="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/70 border border-[#00ff41]/40 text-[#00ff41] font-mono" aria-label={t.close}>×</button>
+              <div className="grid lg:grid-cols-[1.2fr_1fr]">
+                <div className="p-4 sm:p-6">
+                  <div className="aspect-video rounded-lg overflow-hidden border border-[#00ff41]/20">
+                    <img src={(selectedProject.gallery ?? [selectedProject.image]).filter(Boolean)[activeImage] ?? selectedProject.image} alt={`${selectedProject.title} preview ${activeImage + 1}`} className="w-full h-full object-cover object-top" />
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 mt-3">
+                    {(selectedProject.gallery ?? [selectedProject.image]).filter(Boolean).map((image, index) => (
+                      <button key={image} onClick={() => setActiveImage(index)} className={`aspect-video rounded overflow-hidden border ${activeImage === index ? "border-[#00ff41]" : "border-[#00ff41]/20"}`}>
+                        <img src={image} alt="" className="w-full h-full object-cover object-top" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="p-4 sm:p-6 lg:pt-8">
+                  <span className="font-mono text-xs text-[#00ff41]">{t.gallery}</span>
+                  <h3 className="font-display text-2xl sm:text-3xl text-white mt-2 mb-4">{selectedProject.title}</h3>
+                  <p className="font-body text-gray-300 text-sm leading-relaxed">{selectedProject.description}</p>
+                  <h4 className="font-mono text-xs text-[#00ff41] mt-6 mb-3">// {t.workDone}</h4>
+                  <ul className="space-y-2 text-sm text-gray-400">
+                    {(selectedProject.highlights ?? [selectedProject.description]).map((highlight) => <li key={highlight} className="flex gap-2"><span className="text-[#00ff41]">▹</span>{highlight}</li>)}
+                  </ul>
+                  <h4 className="font-mono text-xs text-[#00ff41] mt-6 mb-3">// {t.technologies}</h4>
+                  <div className="flex flex-wrap gap-2">{selectedProject.technologies.map((tech) => <span key={tech} className="px-2 py-1 text-xs font-mono text-[#00ff41]/80 bg-[#00ff41]/5 border border-[#00ff41]/20 rounded">{tech}</span>)}</div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
