@@ -28,6 +28,18 @@ the message to a Telegram bot. The bot token never reaches the browser.
 `.env` is git-ignored. Do not prefix these variables with `VITE_` — Vite inlines
 every `VITE_*` variable into the public client bundle.
 
+## Privacy-friendly visitor counter
+
+The footer can show a unique visitor total without storing raw IP addresses.
+The `/api/visitors` Edge Function hashes the request IP and user agent with
+`VISITOR_HASH_SECRET`, stores only that hash in Upstash Redis, and increments
+the total once per unique hash.
+
+Create an Upstash Redis database, add `UPSTASH_REDIS_REST_URL`,
+`UPSTASH_REDIS_REST_TOKEN`, and `VISITOR_HASH_SECRET` to local/production
+environment variables, then redeploy. If these values are not configured, the
+counter remains unavailable instead of exposing a fake value.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh

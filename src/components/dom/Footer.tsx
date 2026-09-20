@@ -1,9 +1,26 @@
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../../lib/LanguageContext';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { t } = useLanguage();
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/visitors')
+      .then(async (response) => {
+        const result: { ok?: boolean; visitors?: number } = await response.json();
+        if (!response.ok || !result.ok || typeof result.visitors !== 'number') return;
+        if (!cancelled) setVisitorCount(result.visitors);
+      })
+      .catch((error) => console.error('Visitor counter error:', error));
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <footer className="relative py-8 sm:py-10 md:py-12 px-3 sm:px-4 md:px-6 border-t border-[#00ff41]/10">
@@ -35,6 +52,14 @@ const Footer = () => {
           </div>
           <span className="hidden sm:inline text-gray-700">|</span>
           <span className="font-mono text-[10px] xs:text-xs text-gray-500">{t.deployed}</span>
+          {visitorCount !== null && (
+            <>
+              <span className="hidden sm:inline text-gray-700">|</span>
+              <span className="font-mono text-[10px] xs:text-xs text-gray-500">
+                {t.visitors}: <span className="text-[#00ff41]">{visitorCount.toLocaleString()}</span>
+              </span>
+            </>
+          )}
         </div>
       </div>
     </footer>

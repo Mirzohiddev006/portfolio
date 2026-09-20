@@ -29,6 +29,7 @@ const translations = {
     experiencePositions: ["Frontend Dasturchi", "Web Dasturchi", "Talaba Dasturchi"],
     experienceDescriptions: ["Real-time dashboard, player management va staff coordination imkoniyatlariga ega CIMS yaratdim. JWT authentication va role-based access control qo‘shdim.", "Turli mijozlar uchun e-commerce, landing page va business dashboardlar yaratdim. Responsive design va performancega e’tibor qaratdim.", "Statistik tahlil, data visualization va econometric modelingga oid bir nechta akademik loyihalarni ishlab chiqdim."],
     footerBuilt: "Mirzohid tomonidan 💚 bilan yaratildi", online: "TIZIM ISHLAYAPTI", deployed: "VERCEL’GA JOYLASHTIRILGAN",
+    visitors: "TASHRIFLAR",
     projectDetails: {
       "365-crm": { title: "365 Magazine Sales CRM", description: "Operatorlar va adminlar uchun role-based access, WebSocket operator navbati, mijoz va buyurtmalar boshqaruvi, Telegram broadcast, PDF kanal tracking, obuna rejalari va KPI analytics dashboarddan iborat savdo tizimi.", highlights: ["Operator va admin workflowlari", "WebSocket orqali real-time navbat", "Analytics, PDF tracking va Telegram broadcast"] },
       "kas-crm": { title: "KAS CRM", description: "Lead, chat, product, store, user va AI sozlamalarini boshqaruvchi responsive admin panel. React Query, Zustand, token refresh auth va bulk import bilan to‘liq CRUD jarayonlari amalga oshirilgan.", highlights: ["Lead, chat, product va store boshqaruvi", "Token refresh autentifikatsiya", "Bulk import va to‘liq CRUD"] },
@@ -61,6 +62,7 @@ const translations = {
     experiencePositions: ["Frontend Developer", "Web Developer", "Student Developer"],
     experienceDescriptions: ["Built a CIMS with real-time dashboards, player management and staff coordination. Implemented JWT authentication and role-based access control.", "Delivered e-commerce platforms, landing pages and business dashboards with a focus on responsive design and performance.", "Led academic projects covering statistical analysis, data visualization and econometric modelling."],
     footerBuilt: "Designed & Built with 💚 by Mirzohid", online: "SYSTEM ONLINE", deployed: "DEPLOYED ON VERCEL",
+    visitors: "VISITORS",
     projectDetails: {
       "365-crm": { title: "365 Magazine Sales CRM", description: "A sales management system with role-based access for operators and admins, a real-time WebSocket queue, client and order management, Telegram broadcasts, PDF channel tracking, subscriptions and KPI analytics.", highlights: ["Operator and admin workflows", "Real-time WebSocket queue", "Analytics, PDF tracking and Telegram broadcasts"] },
       "kas-crm": { title: "KAS CRM", description: "A responsive admin panel for leads, chats, products, stores, users and AI settings. It includes React Query, Zustand, token refresh authentication and full CRUD with bulk import.", highlights: ["Lead, chat, product and store management", "Token refresh authentication", "Bulk import and complete CRUD"] },
@@ -93,6 +95,7 @@ const translations = {
     experiencePositions: ["Frontend-разработчик", "Web-разработчик", "Студент-разработчик"],
     experienceDescriptions: ["Создал CIMS с real-time dashboard, управлением игроками и координацией команды. Добавил JWT и ролевой доступ.", "Разрабатывал e-commerce, landing pages и бизнес-dashboard с фокусом на адаптивность и производительность.", "Руководил учебными проектами по статистике, визуализации данных и эконометрическому моделированию."],
     footerBuilt: "Создано с 💚 Мирзохидом", online: "СИСТЕМА ОНЛАЙН", deployed: "РАЗВЁРНУТО НА VERCEL",
+    visitors: "ПОСЕТИТЕЛИ",
     projectDetails: {
       "365-crm": { title: "365 Magazine Sales CRM", description: "Система продаж с ролями операторов и администраторов, очередью WebSocket в реальном времени, управлением клиентами и заказами, Telegram-рассылками, PDF-трекингом, подписками и KPI-аналитикой.", highlights: ["Рабочие процессы операторов и админов", "Очередь WebSocket в реальном времени", "Аналитика, PDF-трекинг и Telegram"] },
       "kas-crm": { title: "KAS CRM", description: "Адаптивная админ-панель для лидов, чатов, товаров, магазинов, пользователей и AI-настроек. Реализованы React Query, Zustand, обновление токена и CRUD с массовым импортом.", highlights: ["Управление лидами, чатами и товарами", "Аутентификация с обновлением токена", "Массовый импорт и полный CRUD"] },
