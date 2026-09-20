@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../lib/LanguageContext';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
 
   return (
     <footer className="relative py-8 sm:py-10 md:py-12 px-3 sm:px-4 md:px-6 border-t border-[#00ff41]/10">
@@ -13,7 +15,7 @@ const Footer = () => {
           </motion.a>
 
           <div className="text-center">
-            <p className="font-mono text-[10px] xs:text-xs text-gray-500">Designed & Built with 💚 by Mirzohid</p>
+            <p className="font-mono text-[10px] xs:text-xs text-gray-500">{t.footerBuilt}</p>
             <p className="font-mono text-[10px] xs:text-xs text-gray-600 mt-0.5 sm:mt-1">© {currentYear} All Rights Reserved</p>
           </div>
 
@@ -29,10 +31,10 @@ const Footer = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 mt-4 sm:mt-5 md:mt-6">
           <div className="flex items-center gap-2">
             <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-[#00ff41] rounded-full animate-pulse" />
-            <span className="font-mono text-[10px] xs:text-xs text-gray-500">SYSTEM ONLINE</span>
+            <span className="font-mono text-[10px] xs:text-xs text-gray-500">{t.online}</span>
           </div>
           <span className="hidden sm:inline text-gray-700">|</span>
-          <span className="font-mono text-[10px] xs:text-xs text-gray-500">DEPLOYED ON VERCEL</span>
+          <span className="font-mono text-[10px] xs:text-xs text-gray-500">{t.deployed}</span>
         </div>
       </div>
     </footer>

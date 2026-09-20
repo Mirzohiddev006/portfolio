@@ -60,10 +60,14 @@ const TimelineItem = ({
   experience,
   index,
   isLast,
+  position,
+  description,
 }: {
   experience: ExperienceItem;
   index: number;
   isLast: boolean;
+  position: string;
+  description: string;
 }) => {
   const itemRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(itemRef, { once: true, margin: "-50px" });
@@ -141,7 +145,7 @@ const TimelineItem = ({
               index % 2 === 0 ? "md:text-right" : ""
             }`}
           >
-            {experience.position}
+            {position}
           </h3>
           <p
             className={`font-body text-sm sm:text-base text-[#00ffff] mb-1 ${
@@ -162,7 +166,7 @@ const TimelineItem = ({
               index % 2 === 0 ? "md:text-right" : ""
             }`}
           >
-            {experience.description}
+            {description}
           </p>
 
           <div
@@ -210,7 +214,7 @@ const Experience = () => {
             04. // JOURNEY
           </span>
           <h2
-            className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
+            className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
             style={{ textShadow: "0 0 10px #00ff41" }}
           >
             {t.experience}
@@ -226,6 +230,8 @@ const Experience = () => {
               experience={experience}
               index={index}
               isLast={index === experiences.length - 1}
+              position={t.experiencePositions[index]}
+              description={t.experienceDescriptions[index]}
             />
           ))}
         </div>

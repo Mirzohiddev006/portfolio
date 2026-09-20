@@ -79,15 +79,14 @@ const Contact = () => {
             05. // GET IN TOUCH
           </span>
           <h2
-            className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
+            className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
             style={{ textShadow: "0 0 10px #00ff41" }}
           >
             {t.contact}
           </h2>
           <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-transparent via-[#00ff41] to-transparent mx-auto mt-3 sm:mt-4 md:mt-6" />
           <p className="font-body text-gray-400 text-sm sm:text-base mt-4 sm:mt-5 md:mt-6 max-w-2xl mx-auto px-4">
-            Have a project in mind? Send it over — it lands straight in my
-            Telegram.
+            {t.contactIntro}
           </p>
         </motion.div>
 
@@ -101,12 +100,12 @@ const Contact = () => {
           >
             <div>
               <label className="block font-mono text-xs sm:text-sm text-[#00ff41] mb-1.5 sm:mb-2">
-                // NAME
+                // {t.contactLabels[0]}
               </label>
               <input
                 {...register("name")}
                 type="text"
-                placeholder="Your Name"
+                placeholder={t.contactLabels[0]}
                 className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/50 border ${
                   errors.name ? "border-red-500" : "border-[#00ff41]/30"
                 } rounded-lg font-body text-sm sm:text-base text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all`}
@@ -120,7 +119,7 @@ const Contact = () => {
 
             <div>
               <label className="block font-mono text-xs sm:text-sm text-[#00ff41] mb-1.5 sm:mb-2">
-                // EMAIL
+                // {t.contactLabels[1]}
               </label>
               <input
                 {...register("email")}
@@ -139,12 +138,12 @@ const Contact = () => {
 
             <div>
               <label className="block font-mono text-xs sm:text-sm text-[#00ff41] mb-1.5 sm:mb-2">
-                // SUBJECT
+                // {t.contactLabels[2]}
               </label>
               <input
                 {...register("subject")}
                 type="text"
-                placeholder="Project Inquiry"
+                placeholder={t.contactLabels[2]}
                 className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/50 border ${
                   errors.subject ? "border-red-500" : "border-[#00ff41]/30"
                 } rounded-lg font-body text-sm sm:text-base text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all`}
@@ -158,12 +157,12 @@ const Contact = () => {
 
             <div>
               <label className="block font-mono text-xs sm:text-sm text-[#00ff41] mb-1.5 sm:mb-2">
-                // MESSAGE
+                // {t.contactLabels[3]}
               </label>
               <textarea
                 {...register("message")}
                 rows={5}
-                placeholder="Tell me about your project..."
+                placeholder={t.contactIntro}
                 className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/50 border ${
                   errors.message ? "border-red-500" : "border-[#00ff41]/30"
                 } rounded-lg font-body text-sm sm:text-base text-white placeholder-gray-500 focus:border-[#00ff41] focus:shadow-[0_0_15px_rgba(0,255,65,0.3)] focus:outline-none transition-all resize-none`}
@@ -201,12 +200,12 @@ const Contact = () => {
 
             {submitStatus === "success" && (
               <p className="text-center font-mono text-xs sm:text-sm text-[#00ff41]">
-                ✓ Message delivered to my Telegram!
+                {t.contactSuccess}
               </p>
             )}
             {submitStatus === "error" && (
               <p className="text-center font-mono text-xs sm:text-sm text-red-400">
-                ✗ {errorMessage || "Error. Try again."}
+                ✗ {errorMessage || t.contactError}
               </p>
             )}
           </motion.form>
@@ -219,11 +218,10 @@ const Contact = () => {
           >
             <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl">
               <h3 className="font-display text-xl sm:text-2xl text-white mb-4 sm:mb-5 md:mb-6">
-                LET'S BUILD SOMETHING{" "}
-                <span className="text-[#00ff41]">AMAZING</span>
+                {t.buildTitle}
               </h3>
               <p className="font-body text-gray-400 text-sm sm:text-base mb-6 sm:mb-7 md:mb-8">
-                I'm available for freelance work and full-time opportunities.
+                {t.buildDescription}
               </p>
 
               <div className="space-y-3 sm:space-y-4">
@@ -233,7 +231,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-mono text-[10px] xs:text-xs text-gray-500">
-                      LOCATION
+                      {t.contactLabels[4]}
                     </p>
                     <p className="font-body text-white text-sm sm:text-base">
                       Tashkent, Uzbekistan
@@ -259,7 +257,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-mono text-[10px] xs:text-xs text-gray-500">
-                      TELEGRAM
+                      {t.contactLabels[5]}
                     </p>
                     <a
                       href={`https://t.me/${TELEGRAM_USERNAME}`}
@@ -277,7 +275,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-mono text-[10px] xs:text-xs text-gray-500">
-                      TIMEZONE
+                      {t.contactLabels[6]}
                     </p>
                     <p className="font-body text-white text-sm sm:text-base">
                       GMT+5 (Uzbekistan)
@@ -289,7 +287,7 @@ const Contact = () => {
 
             <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl">
               <h4 className="font-mono text-xs sm:text-sm text-[#00ff41] mb-4 sm:mb-5 md:mb-6">
-                // CONNECT WITH ME
+                // {t.connect}
               </h4>
               <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4">
                 {[
@@ -333,10 +331,10 @@ const Contact = () => {
               <div className="p-3 sm:p-4 font-mono text-xs sm:text-sm">
                 <p className="text-gray-500">$ contact --status</p>
                 <p className="text-[#00ff41] mt-1">
-                  ✓ Online and ready to collaborate
+                  {t.terminalOnline}
                 </p>
                 <p className="text-gray-500 mt-2">$ response_time --avg</p>
-                <p className="text-[#00ffff] mt-1">&lt; 24 hours</p>
+                <p className="text-[#00ffff] mt-1">                {t.responseTime}</p>
                 <p className="text-gray-400 mt-2 animate-pulse">█</p>
               </div>
             </div>

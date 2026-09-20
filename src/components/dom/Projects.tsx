@@ -35,9 +35,7 @@ export const projects: Project[] = [
       "Zod",
       "WebSocket",
     ],
-    image: "/images/projects/365-crm.png",
-    gallery: ["/images/projects/365-crm.png", "/images/projects/cognilabs-cims.png", "/images/projects/evoting.png"],
-    highlights: ["Role-based access and admin workflows", "Real-time WebSocket operator queue", "Analytics, PDF tracking and Telegram broadcasts"],
+    image: "/images/projects/365-crm/cover.png",
     featured: true,
   },
   {
@@ -55,9 +53,6 @@ export const projects: Project[] = [
       "Axios",
       "Zod",
     ],
-    image: "/images/projects/kas-crm.png",
-    gallery: ["/images/projects/kas-crm.png", "/images/projects/365-crm.png", "/images/projects/bunyodkor-academy.png"],
-    highlights: ["Lead, chat, product and store management", "Token refresh authentication", "Bulk import and full CRUD operations"],
     featured: true,
   },
   {
@@ -73,9 +68,7 @@ export const projects: Project[] = [
       "i18n",
       "Drag & Drop",
     ],
-    image: "/images/projects/cognilabs-cims.png",
-    gallery: ["/images/projects/cognilabs-cims.png", "/images/projects/365-crm.png", "/images/projects/evoting.png"],
-    highlights: ["CEO dashboard and CRM client panel", "Drag-and-drop Kanban project management", "Uzbek, English and Russian interface"],
+    image: "/images/projects/cognilabs-cims/cover.png",
     featured: true,
   },
   {
@@ -84,9 +77,7 @@ export const projects: Project[] = [
     description:
       "Electronic voting platform with user registration, active poll participation, and real-time result tracking. Admin panel features KPI dashboard (total polls, active polls, users, votes), leading polls bar chart, status distribution donut chart, poll results table, role-based access (Superadmin/User), light/dark theme, and PDF export functionality.",
     technologies: ["React", "TypeScript", "Vite", "Tailwind CSS", "Chart.js"],
-    image: "/images/projects/evoting.png",
-    gallery: ["/images/projects/evoting.png", "/images/projects/365-crm.png", "/images/projects/kas-crm.png"],
-    highlights: ["Poll participation and live results", "KPI dashboard with charts", "Role-based admin and user access"],
+    image: "/images/projects/evoting/cover.png",
     featured: true,
   },
   {
@@ -102,17 +93,15 @@ export const projects: Project[] = [
       "JWT",
       "Chart.js",
     ],
-    image: "/images/projects/bunyodkor-academy.png",
-    gallery: ["/images/projects/bunyodkor-academy.png", "/images/projects/cognilabs-cims.png", "/images/projects/365-crm.png"],
-    highlights: ["1,500+ active student management", "Payment, attendance and contract tracking", "Financial dashboards and coach panels"],
+    image: "/images/projects/bunyodkor-academy/cover.png",
     featured: true,
   },
   {
     id: "2",
     title: "3D Portfolio Experience",
-    description:
-      "Immersive neo-futuristic portfolio website with WebGL, 3D animations, and interactive particle systems.",
+    description: "",
     technologies: ["React", "Three.js", "Framer Motion", "GSAP"],
+    image: "/images/projects/portfolio-3d/cover.png",
     featured: true,
   },
   {
@@ -150,6 +139,9 @@ const ProjectCard = ({
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const { t } = useLanguage();
+  const details = t.projectDetails[project.id];
+  const title = details?.title ?? project.title;
+  const description = details?.description ?? project.description;
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -205,7 +197,7 @@ const ProjectCard = ({
           {project.image ? (
             <img
               src={project.image}
-              alt={project.title}
+              alt={title}
               className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
@@ -234,11 +226,11 @@ const ProjectCard = ({
 
         {/* Content */}
         <div className="p-4 sm:p-5 md:p-6">
-          <h3 className="font-display text-lg sm:text-xl text-white mb-1.5 sm:mb-2 group-hover:text-[#00ff41] transition-colors duration-300">
-            {project.title}
+          <h3 className="font-display text-base sm:text-lg text-white mb-1.5 sm:mb-2 group-hover:text-[#00ff41] transition-colors duration-300">
+            {title}
           </h3>
           <p className="font-body text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 sm:line-clamp-3">
-            {project.description}
+            {description}
           </p>
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {project.technologies.map((tech) => (
@@ -284,7 +276,7 @@ const Projects = () => {
             03. // {t.projects}
           </span>
           <h2
-            className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
+            className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
             style={{ textShadow: "0 0 10px #00ff41" }}
           >
             {t.projects}
@@ -323,11 +315,11 @@ const Projects = () => {
                 </div>
                 <div className="p-4 sm:p-6 lg:pt-8">
                   <span className="font-mono text-xs text-[#00ff41]">{t.gallery}</span>
-                  <h3 className="font-display text-2xl sm:text-3xl text-white mt-2 mb-4">{selectedProject.title}</h3>
-                  <p className="font-body text-gray-300 text-sm leading-relaxed">{selectedProject.description}</p>
+                  <h3 className="font-display text-xl sm:text-2xl text-white mt-2 mb-4">{t.projectDetails[selectedProject.id]?.title ?? selectedProject.title}</h3>
+                  <p className="font-body text-gray-300 text-sm leading-relaxed">{t.projectDetails[selectedProject.id]?.description ?? selectedProject.description}</p>
                   <h4 className="font-mono text-xs text-[#00ff41] mt-6 mb-3">// {t.workDone}</h4>
                   <ul className="space-y-2 text-sm text-gray-400">
-                    {(selectedProject.highlights ?? [selectedProject.description]).map((highlight) => <li key={highlight} className="flex gap-2"><span className="text-[#00ff41]">▹</span>{highlight}</li>)}
+                    {(t.projectDetails[selectedProject.id]?.highlights ?? selectedProject.highlights ?? [selectedProject.description]).map((highlight) => <li key={highlight} className="flex gap-2"><span className="text-[#00ff41]">▹</span>{highlight}</li>)}
                   </ul>
                   <h4 className="font-mono text-xs text-[#00ff41] mt-6 mb-3">// {t.technologies}</h4>
                   <div className="flex flex-wrap gap-2">{selectedProject.technologies.map((tech) => <span key={tech} className="px-2 py-1 text-xs font-mono text-[#00ff41]/80 bg-[#00ff41]/5 border border-[#00ff41]/20 rounded">{tech}</span>)}</div>

@@ -20,7 +20,7 @@ const skillsData = [
 
 const skillCategories = [
   {
-    title: "Frontend",
+    title: "frontend",
     color: "#00ff41",
     skills: [
       "React",
@@ -32,7 +32,7 @@ const skillCategories = [
     ],
   },
   {
-    title: "Tools & Others",
+    title: "tools",
     color: "#ff00ff",
     skills: ["Git", "Docker", "AWS", "Figma"],
   },
@@ -42,6 +42,10 @@ const Skills = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
   const { t } = useLanguage();
+  const localizedCategories = skillCategories.map((category) => ({
+    ...category,
+    title: category.title === "frontend" ? t.skillsFrontend : t.skillsTools,
+  }));
 
   return (
     <section
@@ -61,7 +65,7 @@ const Skills = () => {
             02. // EXPERTISE
           </span>
           <h2
-            className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
+            className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
             style={{ textShadow: "0 0 10px #00ff41" }}
           >
             {t.skills}
@@ -70,7 +74,7 @@ const Skills = () => {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-          {skillCategories.map((category, categoryIndex) => (
+          {localizedCategories.map((category, categoryIndex) => (
             <motion.div
               key={category.title}
               initial={{ opacity: 0, y: 50 }}
@@ -137,10 +141,10 @@ const Skills = () => {
             <span className="text-xl sm:text-2xl">🚀</span>
             <div>
               <p className="font-mono text-xs sm:text-sm text-gray-400">
-                Always learning and exploring new technologies
+                {t.learning}
               </p>
               <p className="font-mono text-[10px] xs:text-xs text-[#00ff41]/60 mt-0.5 sm:mt-1">
-                // Currently diving into: AI/ML, WebGPU, Rust
+                {t.learningDetail}
               </p>
             </div>
           </div>
