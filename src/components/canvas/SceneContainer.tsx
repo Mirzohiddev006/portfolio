@@ -1,6 +1,5 @@
 import { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Preload, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { create } from 'zustand';
 
@@ -36,17 +35,6 @@ const CodingOrbit = () => {
         <torusGeometry args={[2.2, 0.012, 8, 96]} />
         <meshBasicMaterial color="#00ff41" transparent opacity={0.45} />
       </mesh>
-      {["</>", "{ }", "01", "=>", "CSS", "npm"].map((label, index) => {
-        const angle = (index / 6) * Math.PI * 2;
-        return (
-          <Text key={label} position={[Math.cos(angle) * 2.35, Math.sin(angle) * 2.35, 0]} rotation={[0, 0, -angle]} fontSize={0.28} color="#00ff41" fillOpacity={0.55} anchorX="center" anchorY="middle">
-            {label}
-          </Text>
-        );
-      })}
-      <Text position={[0, 0, 0.1]} fontSize={0.34} color="#00ffff" fillOpacity={0.35} anchorX="center" anchorY="middle">
-        {"</code>"}
-      </Text>
     </group>
   );
 };
@@ -69,7 +57,7 @@ const CodeStreams = () => (
 );
 
 // Particle Field Component
-const ParticleField = ({ count = 300 }: { count?: number }) => {
+const ParticleField = ({ count = 120 }: { count?: number }) => {
   const pointsRef = useRef<THREE.Points>(null);
   const { x, y } = useMouseStore();
 
@@ -177,7 +165,7 @@ const Scene = () => {
       <pointLight position={[10, 10, 10]} intensity={0.5} color="#00ff41" />
       <pointLight position={[-10, -10, -10]} intensity={0.3} color="#00ffff" />
       <CodingOrbit />
-      <ParticleField count={300} />
+      <ParticleField count={120} />
       <GridFloor />
     </>
   );
@@ -198,13 +186,12 @@ const SceneContainer = () => {
       <CodeStreams />
       <Canvas
         camera={{ position: [0, 0, 10], fov: 60 }}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-        dpr={[1, 2]}
+        gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+        dpr={[1, 1.25]}
       >
         <color attach="background" args={['#0a0a0a']} />
         <Suspense fallback={null}>
           <Scene />
-          <Preload all />
         </Suspense>
       </Canvas>
     </div>

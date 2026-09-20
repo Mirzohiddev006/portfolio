@@ -198,6 +198,8 @@ const ProjectCard = ({
             <img
               src={project.image}
               alt={title}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
@@ -303,12 +305,12 @@ const Projects = () => {
               <div className="grid lg:grid-cols-[1.2fr_1fr]">
                 <div className="p-4 sm:p-6">
                   <div className="aspect-video rounded-lg overflow-hidden border border-[#00ff41]/20">
-                    <img src={(selectedProject.gallery ?? [selectedProject.image]).filter(Boolean)[activeImage] ?? selectedProject.image} alt={`${selectedProject.title} preview ${activeImage + 1}`} className="w-full h-full object-cover object-top" />
+                    <img loading="eager" decoding="async" src={(selectedProject.gallery ?? [selectedProject.image]).filter(Boolean)[activeImage] ?? selectedProject.image} alt={`${selectedProject.title} preview ${activeImage + 1}`} className="w-full h-full object-cover object-top" />
                   </div>
                   <div className="grid grid-cols-3 gap-2 mt-3">
                     {(selectedProject.gallery ?? [selectedProject.image]).filter(Boolean).map((image, index) => (
                       <button key={image} onClick={() => setActiveImage(index)} className={`aspect-video rounded overflow-hidden border ${activeImage === index ? "border-[#00ff41]" : "border-[#00ff41]/20"}`}>
-                        <img src={image} alt="" className="w-full h-full object-cover object-top" />
+                        <img loading="lazy" decoding="async" src={image} alt="" className="w-full h-full object-cover object-top" />
                       </button>
                     ))}
                   </div>

@@ -23,6 +23,7 @@
   perspective: 900px;
   pointer-events: none;
   opacity: 0.42;
+  contain: strict;
 }
 
 .code-stream {
@@ -35,6 +36,13 @@
   text-shadow: 0 0 8px rgba(0, 255, 65, 0.7);
   transform: rotateX(58deg) rotateZ(-7deg);
   animation: code-drift 18s linear infinite;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code-stream {
+    animation: none;
+  }
 }
 
 .code-stream:nth-child(3n) { color: rgba(0, 255, 255, 0.38); }
