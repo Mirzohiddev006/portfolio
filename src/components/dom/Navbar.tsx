@@ -1,19 +1,15 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage, type Language } from '../../lib/LanguageContext';
 
-const navLinks = [
-  { label: 'HOME', href: '#hero' },
-  { label: 'ABOUT', href: '#about' },
-  { label: 'SKILLS', href: '#skills' },
-  { label: 'PROJECTS', href: '#projects' },
-  { label: 'EXPERIENCE', href: '#experience' },
-  { label: 'CONTACT', href: '#contact' },
-];
+const navHrefs = ['#hero', '#about', '#skills', '#projects', '#experience', '#contact'];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const { language, setLanguage, t } = useLanguage();
+  const navLinks = navHrefs.map((href, index) => ({ label: t.nav[index], href }));
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -99,6 +95,13 @@ const Navbar = () => {
                 </motion.a>
               ))}
             </div>
+            <div className="hidden md:flex items-center gap-1 border border-[#00ff41]/20 rounded px-1 py-1 ml-4" aria-label={t.language}>
+              {(['uz', 'en', 'ru'] as Language[]).map((item) => (
+                <button key={item} onClick={() => setLanguage(item)} className={`px-2 py-1 font-mono text-[10px] uppercase rounded transition-colors ${language === item ? 'bg-[#00ff41] text-black' : 'text-gray-500 hover:text-[#00ff41]'}`}>
+                  {item}
+                </button>
+              ))}
+            </div>
 
             {/* Mobile Menu Button */}
             <motion.button
@@ -147,6 +150,14 @@ const Navbar = () => {
               className="absolute right-0 top-0 bottom-0 w-4/5 max-w-sm bg-[#0a0a0a]/95 backdrop-blur-lg border-l border-[#00ff41]/20 flex flex-col"
             >
               <div className="h-20" />
+              <div className="flex items-center gap-1 px-4 sm:px-6 md:px-8 mb-4">
+                <span className="font-mono text-[10px] text-gray-600 mr-2">{t.language}:</span>
+                {(['uz', 'en', 'ru'] as Language[]).map((item) => (
+                  <button key={item} onClick={() => setLanguage(item)} className={`px-2 py-1 font-mono text-[10px] uppercase rounded border ${language === item ? 'bg-[#00ff41] text-black border-[#00ff41]' : 'text-gray-500 border-[#00ff41]/20'}`}>
+                    {item}
+                  </button>
+                ))}
+              </div>
               <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 md:px-8 space-y-4 sm:space-y-5 md:space-y-6">
                 {navLinks.map((link, index) => (
                   <motion.a

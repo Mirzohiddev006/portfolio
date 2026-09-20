@@ -1,6 +1,6 @@
 import { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Preload } from '@react-three/drei';
+import { Preload, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { create } from 'zustand';
 
@@ -17,50 +17,36 @@ const useMouseStore = create<MouseStore>((set) => ({
   setPosition: (x, y) => set({ x, y }),
 }));
 
-// Floating Icosahedron Component
-const FloatingGeometry = () => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const wireframeRef = useRef<THREE.LineSegments>(null);
+// A subtle orbit of code symbols replaces the generic 3D shape.
+const CodingOrbit = () => {
+  const groupRef = useRef<THREE.Group>(null);
   const { x, y } = useMouseStore();
 
-  const geometry = useMemo(() => new THREE.IcosahedronGeometry(1.5, 1), []);
-  const edges = useMemo(() => new THREE.EdgesGeometry(geometry), [geometry]);
-
-  const innerMaterial = useMemo(() => new THREE.MeshBasicMaterial({
-    color: new THREE.Color('#00ff41'),
-    transparent: true,
-    opacity: 0.05,
-    side: THREE.DoubleSide,
-  }), []);
-
-  const lineMaterial = useMemo(() => new THREE.LineBasicMaterial({
-    color: new THREE.Color('#00ff41'),
-    transparent: true,
-    opacity: 0.7,
-  }), []);
-
   useFrame((state) => {
-    if (!meshRef.current || !wireframeRef.current) return;
+    if (!groupRef.current) return;
     const time = state.clock.getElapsedTime();
-    
-    meshRef.current.rotation.x = time * 0.1 + y * 0.5;
-    meshRef.current.rotation.y = time * 0.15 + x * 0.5;
-    wireframeRef.current.rotation.x = time * 0.1 + y * 0.5;
-    wireframeRef.current.rotation.y = time * 0.15 + x * 0.5;
-
-    const floatY = Math.sin(time * 0.5) * 0.2;
-    meshRef.current.position.y = floatY;
-    wireframeRef.current.position.y = floatY;
-
-    const pulseScale = 1.5 + Math.sin(time * 2) * 0.05;
-    meshRef.current.scale.setScalar(pulseScale);
-    wireframeRef.current.scale.setScalar(pulseScale);
+    groupRef.current.rotation.z = time * 0.08 + x * 0.1;
+    groupRef.current.rotation.y = time * 0.12 + y * 0.1;
+    groupRef.current.position.y = Math.sin(time * 0.5) * 0.25;
   });
 
   return (
-    <group>
-      <mesh ref={meshRef} geometry={geometry} material={innerMaterial} />
-      <lineSegments ref={wireframeRef} geometry={edges} material={lineMaterial} />
+    <group ref={groupRef} scale={1.35}>
+      <mesh rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[2.2, 0.012, 8, 96]} />
+        <meshBasicMaterial color="#00ff41" transparent opacity={0.45} />
+      </mesh>
+      {["</>", "{ }", "01", "=>", "CSS", "npm"].map((label, index) => {
+        const angle = (index / 6) * Math.PI * 2;
+        return (
+          <Text key={label} position={[Math.cos(angle) * 2.35, Math.sin(angle) * 2.35, 0]} rotation={[0, 0, -angle]} fontSize={0.28} color="#00ff41" fillOpacity={0.55} anchorX="center" anchorY="middle">
+            {label}
+          </Text>
+        );
+      })}
+      <Text position={[0, 0, 0.1]} fontSize={0.34} color="#00ffff" fillOpacity={0.35} anchorX="center" anchorY="middle">
+        {"</code>"}
+      </Text>
     </group>
   );
 };
@@ -173,7 +159,7 @@ const Scene = () => {
       <ambientLight intensity={0.2} />
       <pointLight position={[10, 10, 10]} intensity={0.5} color="#00ff41" />
       <pointLight position={[-10, -10, -10]} intensity={0.3} color="#00ffff" />
-      <FloatingGeometry />
+      <CodingOrbit />
       <ParticleField count={300} />
       <GridFloor />
     </>

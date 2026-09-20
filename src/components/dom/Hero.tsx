@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
+import { useLanguage } from "../../lib/LanguageContext";
 
 // Typewriter Hook
 const useTypewriter = (
-  words: string[],
+  words: readonly string[],
   typeSpeed = 100,
   deleteSpeed = 50,
   delayBetweenWords = 2500
@@ -51,13 +52,8 @@ const useTypewriter = (
 };
 
 const Hero = () => {
-  const roles = [
-    "FRONTEND DEVELOPER",
-    "UI/UX ENGINEER",
-    "REACT SPECIALIST",
-    "WEB ARCHITECT",
-    "CREATIVE CODER",
-  ];
+  const { t } = useLanguage();
+  const roles = t.roles;
   const typedText = useTypewriter(roles, 80, 40, 2500);
   const titleLine1 = "MIRZOHID";
   const titleLine2 = "IBROHIMJONOV";
@@ -121,14 +117,14 @@ const Hero = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="font-mono text-[#00ff41] text-xs sm:text-sm md:text-base tracking-wider sm:tracking-widest mb-3 sm:mb-4 px-2"
         >
-          &lt;HELLO WORLD /&gt; I AM
+          {t.hello}
         </motion.p>
 
         {/* Main Title */}
         <div className="mb-3 sm:mb-4 md:mb-6 px-2">
           <h1
             ref={titleRef1}
-            className="font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight sm:leading-normal"
+            className="font-display text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white leading-tight sm:leading-normal"
           >
             {titleLine1.split("").map((char, index) => (
               <span
@@ -136,7 +132,7 @@ const Hero = () => {
                 className="char inline-block"
                 style={{
                   textShadow:
-                    "0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 40px #00ff41",
+                    "0 0 12px #00ff41, 0 0 28px #00ff41, 0 0 60px rgba(0,255,65,0.9)",
                 }}
               >
                 {char === " " ? "\u00A0" : char}
@@ -145,7 +141,7 @@ const Hero = () => {
           </h1>
           <h1
             ref={titleRef2}
-            className="font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight sm:leading-normal"
+            className="font-display text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white leading-tight sm:leading-normal"
           >
             {titleLine2.split("").map((char, index) => (
               <span
@@ -153,7 +149,7 @@ const Hero = () => {
                 className="char inline-block"
                 style={{
                   textShadow:
-                    "0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 40px #00ff41",
+                    "0 0 12px #00ff41, 0 0 28px #00ff41, 0 0 60px rgba(0,255,65,0.9)",
                 }}
               >
                 {char === " " ? "\u00A0" : char}
@@ -183,10 +179,7 @@ const Hero = () => {
           transition={{ duration: 0.6, delay: 1.2 }}
           className="font-body text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 max-w-2xl mx-auto mb-6 sm:mb-8 md:mb-10 leading-relaxed px-4 sm:px-6"
         >
-          Crafting immersive digital experiences through the fusion of
-          <span className="text-[#00ff41]"> cutting-edge technology</span> and
-          <span className="text-[#00ffff]"> creative design</span>. Building the
-          future, one line of code at a time.
+          {t.heroDescription}
         </motion.p>
 
         {/* CTA Buttons */}
@@ -208,7 +201,7 @@ const Hero = () => {
             whileHover={{ scale: 1.02, boxShadow: "0 0 20px #00ff41" }}
             whileTap={{ scale: 0.98 }}
           >
-            [ VIEW PROJECTS ]
+            {t.viewProjects}
           </motion.a>
           <motion.a
             href="#contact"
@@ -222,7 +215,7 @@ const Hero = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            GET IN TOUCH →
+            {t.getInTouch}
           </motion.a>
         </motion.div>
 
