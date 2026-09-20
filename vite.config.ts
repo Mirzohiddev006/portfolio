@@ -38,6 +38,9 @@ function contactApi(): Plugin {
                 headers: {
                   'content-type':
                     req.headers['content-type'] ?? 'application/json',
+                  'user-agent': req.headers['user-agent'] ?? '',
+                  'x-forwarded-for': String(req.headers['x-forwarded-for'] ?? ''),
+                  'x-real-ip': String(req.headers['x-real-ip'] ?? ''),
                 },
                 body:
                   req.method === 'GET' || req.method === 'HEAD'

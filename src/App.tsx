@@ -104,7 +104,7 @@ const LoadingFallback = () => (
 );
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [showScene, setShowScene] = useState(false);
 
   useEffect(() => {
