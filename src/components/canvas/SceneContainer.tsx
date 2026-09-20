@@ -1,4 +1,4 @@
-import { useRef, useMemo, Suspense } from 'react';
+import { useRef, useMemo, Suspense, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { create } from 'zustand';
@@ -35,6 +35,12 @@ const CodingOrbit = () => {
         <torusGeometry args={[2.2, 0.012, 8, 96]} />
         <meshBasicMaterial color="#00ff41" transparent opacity={0.45} />
       </mesh>
+      {[[-1.4, 0.8, -0.3], [1.35, -0.65, -0.2], [0.1, 1.25, -0.4]].map((position, index) => (
+        <mesh key={index} position={position as [number, number, number]} rotation={[index * 0.7, index * 0.5, index * 0.3]}>
+          <boxGeometry args={[0.45 + index * 0.12, 0.45 + index * 0.12, 0.45 + index * 0.12]} />
+          <meshBasicMaterial color={index === 1 ? "#00ffff" : "#00ff41"} wireframe transparent opacity={0.38} />
+        </mesh>
+      ))}
     </group>
   );
 };
@@ -174,6 +180,15 @@ const Scene = () => {
 // Scene Container with mouse tracking
 const SceneContainer = () => {
   const setPosition = useMouseStore((state) => state.setPosition);
+  const [isLowPower, setIsLowPower] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px), (prefers-reduced-motion: reduce)');
+    const update = () => setIsLowPower(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener('change', update);
+    return () => mediaQuery.removeEventListener('change', update);
+  }, []);
 
   const handleMouseMove = (event: React.MouseEvent) => {
     const x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -184,7 +199,7 @@ const SceneContainer = () => {
   return (
     <div className="fixed inset-0 z-0" onMouseMove={handleMouseMove}>
       <CodeStreams />
-      <Canvas
+      {!isLowPower && <Canvas
         camera={{ position: [0, 0, 10], fov: 60 }}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
         dpr={[1, 1.25]}
@@ -193,7 +208,7 @@ const SceneContainer = () => {
         <Suspense fallback={null}>
           <Scene />
         </Suspense>
-      </Canvas>
+      </Canvas>}
     </div>
   );
 };

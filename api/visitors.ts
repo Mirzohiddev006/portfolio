@@ -38,9 +38,15 @@ export default async function handler(request: Request): Promise<Response> {
 
   try {
     const visitorKey = `portfolio:visitor:${await hashVisitor(request, secret)}`;
-    const isNewVisitor = await redis.set(visitorKey, "1", { nx: true });
-    const total = isNewVisitor ? await redis.incr("portfolio:visitors:total") : await redis.get<number>("portfolio:visitors:total") ?? 0;
-    return json(200, { ok: true, visitors: Number(total) });
+    const result = await redis.eval<[], number>(
+      `if redis.call("SET", KEYS[1], "1", "NX") then
+        return redis.call("INCR", KEYS[2])
+      end
+      return tonumber(redis.call("GET", KEYS[2]) or "0")`,
+      [visitorKey, "portfolio:visitors:total"],
+      [],
+    );
+    return json(200, { ok: true, visitors: Number(result ?? 0) });
   } catch (error) {
     console.error("Visitor counter request failed:", error);
     return json(502, { ok: false, error: "Could not load visitor count" });
