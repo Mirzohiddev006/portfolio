@@ -3,13 +3,6 @@ import { motion, useInView } from "framer-motion";
 import { useLanguage } from "../../lib/LanguageContext";
 import { projects } from "./Projects";
 
-const stats = [
-  { value: "1+", label: "Years Experience" },
-  { value: `${projects.length}+`, label: "Projects Completed" },
-  { value: "10+", label: "Technologies" },
-  { value: "100%", label: "Client Satisfaction" },
-];
-
 const technologies = [
   "React",
   "TypeScript",
@@ -24,7 +17,33 @@ const technologies = [
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const codeSnippet = language === "uz"
+    ? `const developer = {
+  name: "Mirzohid",
+  role: "Frontend dasturchi",
+  passion: "Kuchli UI yaratish",
+  available: true
+};`
+    : language === "ru"
+      ? `const developer = {
+  name: "Mirzohid",
+  role: "Frontend-разработчик",
+  passion: "Создавать UI",
+  available: true
+};`
+      : `const developer = {
+  name: "Mirzohid",
+  role: "Frontend Developer",
+  passion: "Building amazing UIs",
+  available: true
+};`;
+  const stats = [
+    { value: "1+", label: t.stats[0] },
+    { value: `${projects.length}+`, label: t.stats[1] },
+    { value: "10+", label: t.stats[2] },
+    { value: "100%", label: t.stats[3] },
+  ];
 
   return (
     <section
@@ -44,7 +63,7 @@ const About = () => {
             01. // {t.about}
           </span>
           <h2
-            className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
+            className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white mt-2 sm:mt-3 md:mt-4 px-2"
             style={{ textShadow: "0 0 10px #00ff41" }}
           >
             {t.aboutTitle}
@@ -62,30 +81,20 @@ const About = () => {
           >
             <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-5 md:p-6 rounded-lg">
               <p className="font-body text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
-                I'm a passionate{" "}
-                <span className="text-[#00ff41]">Frontend Developer</span> with
-                expertise in building exceptional digital experiences. My
-                journey in web development started with a curiosity for creating
-                interactive interfaces and has evolved into a deep understanding
-                of modern web technologies.
+                {t.aboutIntro}
               </p>
             </div>
 
             <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-5 md:p-6 rounded-lg">
               <p className="font-body text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
-                I specialize in <span className="text-[#00ffff]">React</span>{" "}
-                and <span className="text-[#00ffff]">TypeScript</span>, with a
-                strong focus on creating performant, accessible, and visually
-                stunning web applications. I love experimenting with{" "}
-                <span className="text-[#ff00ff]">3D graphics</span> and
-                animations.
+                {t.aboutSpecialty}
               </p>
             </div>
 
             {/* Tech stack */}
             <div>
               <h3 className="font-mono text-xs sm:text-sm text-[#00ff41] mb-3 sm:mb-4 tracking-wide sm:tracking-wider">
-                // TECH STACK
+                // {t.techStack}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {technologies.map((tech, index) => (
@@ -149,12 +158,7 @@ const About = () => {
               </div>
               <pre className="p-3 sm:p-4 font-mono text-xs sm:text-sm text-gray-400 overflow-x-auto">
                 <code>
-                  {`const developer = {
-  name: "Mirzohid",
-  role: "Frontend Developer",
-  passion: "Building amazing UIs",
-  available: true
-};`}
+                  {codeSnippet}
                 </code>
               </pre>
             </motion.div>

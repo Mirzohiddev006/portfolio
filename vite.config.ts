@@ -12,22 +12,28 @@ function contactApi(): Plugin {
     apply: 'serve',
     config(_config, { mode }) {
       const env = loadEnv(mode, process.cwd(), '')
-      for (const key of ['TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID']) {
+      for (const key of [
+        'TELEGRAM_BOT_TOKEN',
+        'TELEGRAM_CHAT_ID',
+        'UPSTASH_REDIS_REST_URL',
+        'UPSTASH_REDIS_REST_TOKEN',
+        'VISITOR_HASH_SECRET',
+      ]) {
         if (!process.env[key] && env[key]) process.env[key] = env[key]
       }
     },
     configureServer(server) {
-      server.middlewares.use('/api/contact', (req, res) => {
+      const mountApi = (path: string, modulePath: string) => server.middlewares.use(path, (req, res) => {
         void (async () => {
           try {
             const chunks: Buffer[] = []
             for await (const chunk of req) chunks.push(chunk as Buffer)
 
-            const mod = await server.ssrLoadModule('/api/contact.ts')
+            const mod = await server.ssrLoadModule(modulePath)
             const handler = mod.default as (r: Request) => Promise<Response>
 
             const response = await handler(
-              new Request('http://localhost/api/contact', {
+              new Request(`http://localhost${path}`, {
                 method: req.method,
                 headers: {
                   'content-type':
@@ -51,6 +57,8 @@ function contactApi(): Plugin {
           }
         })()
       })
+      mountApi('/api/contact', '/api/contact.ts')
+      mountApi('/api/visitors', '/api/visitors.ts')
     },
   }
 }

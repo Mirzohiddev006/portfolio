@@ -29,17 +29,17 @@ const Loader = ({ onComplete }: { onComplete: () => void }) => {
 
     const interval = setInterval(() => {
       setProgress((prev) => {
-        const newProgress = prev + Math.random() * 15;
+        const newProgress = prev + 35;
         if (newProgress >= 100) {
           clearInterval(interval);
-          setTimeout(onComplete, 500);
+          setTimeout(onComplete, 120);
           return 100;
         }
         const statusIndex = Math.min(Math.floor(newProgress / 25), statuses.length - 1);
         setStatus(statuses[statusIndex]);
         return newProgress;
       });
-    }, 150);
+    }, 80);
 
     return () => clearInterval(interval);
   }, [onComplete]);
@@ -105,6 +105,13 @@ const LoadingFallback = () => (
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [showScene, setShowScene] = useState(false);
+
+  useEffect(() => {
+    const startScene = () => setShowScene(true);
+    const timeoutId = window.setTimeout(startScene, 800);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
 
   return (
     <LanguageProvider>
@@ -121,7 +128,7 @@ function App() {
           >
             <Suspense fallback={<LoadingFallback />}>
               {/* 3D Background */}
-              <SceneContainer />
+              {showScene && <SceneContainer />}
               
               {/* Grid overlay */}
               <div className="fixed inset-0 pointer-events-none z-0" style={{

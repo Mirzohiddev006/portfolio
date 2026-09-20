@@ -124,7 +124,7 @@ const Hero = () => {
         <div className="mb-3 sm:mb-4 md:mb-6 px-2">
           <h1
             ref={titleRef1}
-            className="font-display text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white leading-tight sm:leading-normal"
+            className="font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight sm:leading-normal"
           >
             {titleLine1.split("").map((char, index) => (
               <span
@@ -141,7 +141,7 @@ const Hero = () => {
           </h1>
           <h1
             ref={titleRef2}
-            className="font-display text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white leading-tight sm:leading-normal"
+            className="font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight sm:leading-normal"
           >
             {titleLine2.split("").map((char, index) => (
               <span
@@ -165,7 +165,7 @@ const Hero = () => {
           transition={{ duration: 0.6, delay: 1 }}
           className="mb-6 sm:mb-8 px-2"
         >
-          <h2 className="font-display text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-[#00ff41]/80 tracking-wide sm:tracking-wider break-words">
+          <h2 className="font-display text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-[#00ff41]/80 tracking-wide sm:tracking-wider break-words">
             <span className="text-gray-500">&gt;</span>{" "}
             <span style={{ textShadow: "0 0 5px #00ff41" }}>{typedText}</span>
             <span className="animate-pulse text-[#00ff41]">_</span>
@@ -228,7 +228,7 @@ const Hero = () => {
         >
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-[#00ff41] rounded-full animate-pulse" />
-            <span className="whitespace-nowrap">AVAILABLE FOR WORK</span>
+            <span className="whitespace-nowrap">{t.status}</span>
           </div>
           <div className="hidden sm:flex items-center gap-2">
             <span className="text-[#00ff41]">◆</span>
