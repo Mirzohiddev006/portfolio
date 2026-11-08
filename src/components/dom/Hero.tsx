@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, type Variants } from "framer-motion";
 import { useLanguage } from "../../lib/LanguageContext";
+import { useVisitorCount } from "../../lib/useVisitorCount";
 
 // Typewriter Hook
 const useTypewriter = (
@@ -75,6 +76,7 @@ const NameLine = ({ text, delay, className = "" }: { text: string; delay: number
 const Hero = () => {
   const { t } = useLanguage();
   const typedText = useTypewriter(t.roles, 80, 40, 2500);
+  const visitorCount = useVisitorCount();
 
   return (
     <section
@@ -187,6 +189,18 @@ const Hero = () => {
             <span className="text-[#00ff41]">◆</span>
             <span className="whitespace-nowrap">TASHKENT, UZBEKISTAN</span>
           </div>
+          {visitorCount !== null && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center gap-2"
+            >
+              <span className="text-[#00ffff]">◉</span>
+              <span className="whitespace-nowrap">
+                {t.visitors}: <span className="text-[#00ff41]">{visitorCount.toLocaleString("en-US")}</span>
+              </span>
+            </motion.div>
+          )}
         </motion.div>
       </div>
 
