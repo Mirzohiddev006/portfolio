@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import gsap from "gsap";
+import { useState, useEffect } from "react";
+import { motion, type Variants } from "framer-motion";
 import { useLanguage } from "../../lib/LanguageContext";
 
 // Typewriter Hook
@@ -15,97 +14,79 @@ const useTypewriter = (
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const currentWord = words[wordIndex];
+    const currentWord = words[wordIndex % words.length];
+    const finishedTyping = !isDeleting && text === currentWord;
 
     const timeout = setTimeout(
       () => {
-        if (!isDeleting) {
-          if (text.length < currentWord.length) {
-            setText(currentWord.slice(0, text.length + 1));
-          } else {
-            setTimeout(() => setIsDeleting(true), delayBetweenWords);
-          }
+        if (finishedTyping) {
+          setIsDeleting(true);
+        } else if (!isDeleting) {
+          setText(currentWord.slice(0, text.length + 1));
+        } else if (text.length > 0) {
+          setText(text.slice(0, -1));
         } else {
-          if (text.length > 0) {
-            setText(text.slice(0, -1));
-          } else {
-            setIsDeleting(false);
-            setWordIndex((prev) => (prev + 1) % words.length);
-          }
+          setIsDeleting(false);
+          setWordIndex((prev) => (prev + 1) % words.length);
         }
       },
-      isDeleting ? deleteSpeed : typeSpeed
+      finishedTyping ? delayBetweenWords : isDeleting ? deleteSpeed : typeSpeed
     );
 
     return () => clearTimeout(timeout);
-  }, [
-    text,
-    isDeleting,
-    wordIndex,
-    words,
-    typeSpeed,
-    deleteSpeed,
-    delayBetweenWords,
-  ]);
+  }, [text, isDeleting, wordIndex, words, typeSpeed, deleteSpeed, delayBetweenWords]);
 
   return text;
 };
 
+const nameLine: Variants = {
+  hidden: {},
+  visible: (delay: number) => ({
+    transition: { staggerChildren: 0.04, delayChildren: delay },
+  }),
+};
+
+const nameChar: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+};
+
+// A soft halo instead of the old triple 60px neon glow, which bled into the
+// letters and was tiring to read, especially on phones.
+const NAME_GLOW = "0 0 18px rgba(0,255,65,0.35), 0 0 2px rgba(0,255,65,0.6)";
+
+const NameLine = ({ text, delay, className = "" }: { text: string; delay: number; className?: string }) => (
+  <motion.span
+    className={`block whitespace-nowrap ${className}`}
+    variants={nameLine}
+    custom={delay}
+    initial="hidden"
+    animate="visible"
+    aria-hidden="true"
+  >
+    {text.split("").map((char, index) => (
+      <motion.span key={index} variants={nameChar} className="inline-block">
+        {char}
+      </motion.span>
+    ))}
+  </motion.span>
+);
+
 const Hero = () => {
   const { t } = useLanguage();
-  const roles = t.roles;
-  const typedText = useTypewriter(roles, 80, 40, 2500);
-  const titleLine1 = "MIRZOHID";
-  const titleLine2 = "IBROHIMJONOV";
-  const titleRef1 = useRef<HTMLHeadingElement>(null);
-  const titleRef2 = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    if (titleRef1.current) {
-      const chars = titleRef1.current.querySelectorAll(".char");
-      gsap.fromTo(
-        chars,
-        { opacity: 0, y: 50, rotateX: -90 },
-        {
-          opacity: 1,
-          y: 0,
-          rotateX: 0,
-          duration: 0.8,
-          stagger: 0.05,
-          ease: "back.out(1.7)",
-          delay: 0.5,
-        }
-      );
-    }
-    if (titleRef2.current) {
-      const chars = titleRef2.current.querySelectorAll(".char");
-      gsap.fromTo(
-        chars,
-        { opacity: 0, y: 50, rotateX: -90 },
-        {
-          opacity: 1,
-          y: 0,
-          rotateX: 0,
-          duration: 0.8,
-          stagger: 0.05,
-          ease: "back.out(1.7)",
-          delay: 0.7,
-        }
-      );
-    }
-  }, []);
+  const typedText = useTypewriter(t.roles, 80, 40, 2500);
 
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center px-3 sm:px-4 md:px-6 lg:px-8 overflow-hidden pt-20 sm:pt-24"
+      className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-6 lg:px-8 overflow-hidden pt-24 pb-24 sm:pb-28"
     >
       <div className="relative z-10 max-w-5xl mx-auto text-center w-full">
         {/* Decorative line */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 1, delay: 0.2 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
           className="w-20 sm:w-24 md:w-32 h-px bg-gradient-to-r from-transparent via-[#00ff41] to-transparent mx-auto mb-4 sm:mb-6 md:mb-8"
           style={{ boxShadow: "0 0 20px #00ff41" }}
         />
@@ -114,60 +95,32 @@ const Hero = () => {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="font-mono text-[#00ff41] text-xs sm:text-sm md:text-base tracking-wider sm:tracking-widest mb-3 sm:mb-4 px-2"
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="font-mono text-[#00ff41]/90 text-xs sm:text-sm md:text-base tracking-wider sm:tracking-widest mb-3 sm:mb-5"
         >
           {t.hello}
         </motion.p>
 
         {/* Main Title */}
-        <div className="mb-3 sm:mb-4 md:mb-6 px-2">
-          <h1
-            ref={titleRef1}
-            className="font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight sm:leading-normal"
-          >
-            {titleLine1.split("").map((char, index) => (
-              <span
-                key={index}
-                className="char inline-block"
-                style={{
-                  textShadow:
-                    "0 0 12px #00ff41, 0 0 28px #00ff41, 0 0 60px rgba(0,255,65,0.9)",
-                }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </span>
-            ))}
-          </h1>
-          <h1
-            ref={titleRef2}
-            className="font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight sm:leading-normal"
-          >
-            {titleLine2.split("").map((char, index) => (
-              <span
-                key={index}
-                className="char inline-block"
-                style={{
-                  textShadow:
-                    "0 0 12px #00ff41, 0 0 28px #00ff41, 0 0 60px rgba(0,255,65,0.9)",
-                }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </span>
-            ))}
-          </h1>
-        </div>
+        <h1
+          className="font-display font-bold text-white leading-[1.05] tracking-[0.04em] text-[clamp(1.85rem,8.6vw,5.25rem)] mb-4 sm:mb-6 md:mb-8"
+          style={{ textShadow: NAME_GLOW }}
+        >
+          <span className="sr-only">Mirzohid Ibrohimjonov</span>
+          <NameLine text="MIRZOHID" delay={0.3} />
+          <NameLine text="IBROHIMJONOV" delay={0.45} className="text-[#d9ffe3]" />
+        </h1>
 
         {/* Typewriter subtitle */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1 }}
-          className="mb-6 sm:mb-8 px-2"
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="mb-5 sm:mb-8 min-h-[1.75rem] sm:min-h-[2.25rem]"
         >
-          <h2 className="font-display text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-[#00ff41]/80 tracking-wide sm:tracking-wider break-words">
+          <h2 className="font-display text-[15px] sm:text-lg md:text-xl lg:text-2xl text-[#00ff41]/85 tracking-wide sm:tracking-wider whitespace-nowrap">
             <span className="text-gray-500">&gt;</span>{" "}
-            <span style={{ textShadow: "0 0 5px #00ff41" }}>{typedText}</span>
+            <span style={{ textShadow: "0 0 6px rgba(0,255,65,0.5)" }}>{typedText}</span>
             <span className="animate-pulse text-[#00ff41]">_</span>
           </h2>
         </motion.div>
@@ -176,8 +129,8 @@ const Hero = () => {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
-          className="font-body text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 max-w-2xl mx-auto mb-6 sm:mb-8 md:mb-10 leading-relaxed px-4 sm:px-6"
+          transition={{ duration: 0.6, delay: 0.95 }}
+          className="font-body text-[15px] sm:text-base md:text-lg lg:text-xl text-gray-300/80 max-w-2xl mx-auto mb-7 sm:mb-8 md:mb-10 leading-relaxed sm:px-6"
         >
           {t.heroDescription}
         </motion.p>
@@ -186,8 +139,8 @@ const Hero = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4"
+          transition={{ duration: 0.6, delay: 1.1 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 max-w-xs sm:max-w-none mx-auto"
         >
           <motion.a
             href="#projects"
@@ -223,14 +176,14 @@ const Hero = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.6 }}
-          className="mt-8 sm:mt-12 md:mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 font-mono text-[10px] xs:text-xs text-gray-500 px-4"
+          transition={{ duration: 0.6, delay: 1.25 }}
+          className="mt-8 sm:mt-12 md:mt-14 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 sm:gap-8 font-mono text-[11px] sm:text-xs text-gray-500"
         >
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-[#00ff41] rounded-full animate-pulse" />
             <span className="whitespace-nowrap">{t.status}</span>
           </div>
-          <div className="hidden sm:flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <span className="text-[#00ff41]">◆</span>
             <span className="whitespace-nowrap">TASHKENT, UZBEKISTAN</span>
           </div>
@@ -241,8 +194,8 @@ const Hero = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 2 }}
-        className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2"
+        transition={{ duration: 0.6, delay: 1.5 }}
+        className="hidden sm:block absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}

@@ -29,7 +29,7 @@ const Navbar = () => {
       { threshold: 0.3, rootMargin: '-100px 0px -100px 0px' }
     );
 
-    navLinks.forEach(({ href }) => {
+    navHrefs.forEach((href) => {
       const el = document.querySelector(href);
       if (el) observer.observe(el);
     });
