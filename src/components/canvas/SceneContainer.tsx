@@ -62,6 +62,16 @@ const CodeStreams = () => (
   </div>
 );
 
+// Deterministic PRNG (mulberry32) so particle layout is pure and stable
+// across re-renders.
+const createRandom = (seed: number) => () => {
+  seed |= 0;
+  seed = (seed + 0x6d2b79f5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+
 // Particle Field Component
 const ParticleField = ({ count = 120 }: { count?: number }) => {
   const pointsRef = useRef<THREE.Points>(null);
@@ -71,15 +81,16 @@ const ParticleField = ({ count = 120 }: { count?: number }) => {
     const positions = new Float32Array(count * 3);
     const velocities = new Float32Array(count * 3);
     const spread = 20;
+    const random = createRandom(count);
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
-      positions[i3] = (Math.random() - 0.5) * spread;
-      positions[i3 + 1] = (Math.random() - 0.5) * spread;
-      positions[i3 + 2] = (Math.random() - 0.5) * spread;
-      velocities[i3] = (Math.random() - 0.5) * 0.01;
-      velocities[i3 + 1] = (Math.random() - 0.5) * 0.01;
-      velocities[i3 + 2] = (Math.random() - 0.5) * 0.01;
+      positions[i3] = (random() - 0.5) * spread;
+      positions[i3 + 1] = (random() - 0.5) * spread;
+      positions[i3 + 2] = (random() - 0.5) * spread;
+      velocities[i3] = (random() - 0.5) * 0.01;
+      velocities[i3 + 1] = (random() - 0.5) * 0.01;
+      velocities[i3 + 2] = (random() - 0.5) * 0.01;
     }
     return { positions, velocities };
   }, [count]);

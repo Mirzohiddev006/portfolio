@@ -6,12 +6,14 @@ import { projects } from "./Projects";
 const technologies = [
   "React",
   "TypeScript",
-  "Next.js",
-  "Node.js",
-  "Three.js",
+  "Feature-Sliced Design",
+  "TanStack Query",
+  "Zustand",
   "Tailwind CSS",
+  "Python",
+  "FastAPI",
+  "aiogram",
   "PostgreSQL",
-  "Git",
 ];
 
 const About = () => {
@@ -21,27 +23,30 @@ const About = () => {
   const codeSnippet = language === "uz"
     ? `const developer = {
   name: "Mirzohid",
-  role: "Frontend dasturchi",
-  passion: "Kuchli UI yaratish",
+  role: "Fullstack dasturchi",
+  company: "Mimoram (UzCombinator)",
+  stack: ["React", "TypeScript", "FastAPI"],
   available: true
 };`
     : language === "ru"
       ? `const developer = {
   name: "Mirzohid",
-  role: "Frontend-разработчик",
-  passion: "Создавать UI",
+  role: "Fullstack-разработчик",
+  company: "Mimoram (UzCombinator)",
+  stack: ["React", "TypeScript", "FastAPI"],
   available: true
 };`
       : `const developer = {
   name: "Mirzohid",
-  role: "Frontend Developer",
-  passion: "Building amazing UIs",
+  role: "Fullstack Developer",
+  company: "Mimoram (UzCombinator)",
+  stack: ["React", "TypeScript", "FastAPI"],
   available: true
 };`;
   const stats = [
     { value: "1+", label: t.stats[0] },
     { value: `${projects.length}+`, label: t.stats[1] },
-    { value: "10+", label: t.stats[2] },
+    { value: "20+", label: t.stats[2] },
     { value: "100%", label: t.stats[3] },
   ];
 
@@ -49,7 +54,7 @@ const About = () => {
     <section
       id="about"
       ref={sectionRef}
-      className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-3 sm:px-4 md:px-6 overflow-hidden"
+      className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 md:px-6 overflow-hidden"
     >
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
@@ -79,13 +84,13 @@ const About = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-4 sm:space-y-5 md:space-y-6"
           >
-            <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-5 md:p-6 rounded-lg">
+            <div className="bg-[#0a0a0a]/85 md:bg-[#0a0a0a]/70 md:backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-5 md:p-6 rounded-lg">
               <p className="font-body text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
                 {t.aboutIntro}
               </p>
             </div>
 
-            <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-5 md:p-6 rounded-lg">
+            <div className="bg-[#0a0a0a]/85 md:bg-[#0a0a0a]/70 md:backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-5 md:p-6 rounded-lg">
               <p className="font-body text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
                 {t.aboutSpecialty}
               </p>
@@ -126,7 +131,7 @@ const About = () => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ delay: 0.3 + index * 0.1 }}
-                  className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-5 md:p-6 rounded-lg text-center hover:border-[#00ff41]/50 hover:shadow-[0_0_20px_rgba(0,255,65,0.2)] transition-all duration-300"
+                  className="bg-[#0a0a0a]/85 md:bg-[#0a0a0a]/70 md:backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-5 md:p-6 rounded-lg text-center hover:border-[#00ff41]/50 hover:shadow-[0_0_20px_rgba(0,255,65,0.2)] transition-all duration-300"
                 >
                   <span
                     className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#00ff41] block"
@@ -146,7 +151,7 @@ const About = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.6 }}
-              className="mt-4 sm:mt-5 md:mt-6 bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 rounded-lg overflow-hidden"
+              className="mt-4 sm:mt-5 md:mt-6 bg-[#0a0a0a]/85 md:bg-[#0a0a0a]/70 md:backdrop-blur-lg border border-[#00ff41]/10 rounded-lg overflow-hidden"
             >
               <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#0f0f0f] border-b border-[#00ff41]/10">
                 <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-red-500/80" />

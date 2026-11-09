@@ -66,7 +66,7 @@ const Contact = () => {
     <section
       id="contact"
       ref={sectionRef}
-      className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-3 sm:px-4 md:px-6 overflow-hidden"
+      className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 md:px-6 overflow-hidden"
     >
       <div className="max-w-6xl mx-auto">
         <motion.div
@@ -96,7 +96,7 @@ const Contact = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
             onSubmit={handleSubmit(onSubmit)}
-            className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl space-y-4 sm:space-y-5 md:space-y-6"
+            className="bg-[#0a0a0a]/85 md:bg-[#0a0a0a]/70 md:backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl space-y-4 sm:space-y-5 md:space-y-6"
           >
             <div>
               <label className="block font-mono text-xs sm:text-sm text-[#00ff41] mb-1.5 sm:mb-2">
@@ -216,7 +216,7 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="space-y-6 sm:space-y-8"
           >
-            <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl">
+            <div className="bg-[#0a0a0a]/85 md:bg-[#0a0a0a]/70 md:backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl">
               <h3 className="font-display text-xl sm:text-2xl text-white mb-4 sm:mb-5 md:mb-6">
                 {t.buildTitle}
               </h3>
@@ -285,7 +285,7 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl">
+            <div className="bg-[#0a0a0a]/85 md:bg-[#0a0a0a]/70 md:backdrop-blur-lg border border-[#00ff41]/10 p-4 sm:p-6 md:p-8 rounded-xl">
               <h4 className="font-mono text-xs sm:text-sm text-[#00ff41] mb-4 sm:mb-5 md:mb-6">
                 // {t.connect}
               </h4>
@@ -319,7 +319,7 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="bg-[#0a0a0a]/70 backdrop-blur-lg border border-[#00ff41]/10 rounded-xl overflow-hidden">
+            <div className="bg-[#0a0a0a]/85 md:bg-[#0a0a0a]/70 md:backdrop-blur-lg border border-[#00ff41]/10 rounded-xl overflow-hidden">
               <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#0f0f0f] border-b border-[#00ff41]/10">
                 <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-red-500/80" />
                 <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-yellow-500/80" />
