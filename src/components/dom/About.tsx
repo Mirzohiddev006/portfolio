@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useLanguage } from "../../lib/LanguageContext";
-import { projects } from "./Projects";
 
 const technologies = [
   "React",
@@ -44,8 +43,8 @@ const About = () => {
   available: true
 };`;
   const stats = [
-    { value: "1+", label: t.stats[0] },
-    { value: `${projects.length}+`, label: t.stats[1] },
+    { value: "2+", label: t.stats[0] },
+    { value: "12+", label: t.stats[1] },
     { value: "20+", label: t.stats[2] },
     { value: "100%", label: t.stats[3] },
   ];
