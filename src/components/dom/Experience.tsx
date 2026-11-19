@@ -13,16 +13,16 @@ interface ExperienceItem {
 // here must match `experienceItems` there.
 const experiences: ExperienceItem[] = [
   {
-    id: "mimoram",
-    company: "Mimoram · AI startup",
-    current: true,
-    technologies: ["React", "TypeScript", "Python", "FastAPI", "AI"],
-  },
-  {
     id: "freelance",
     company: "Freelance",
     current: true,
-    technologies: ["React", "FastAPI", "PostGIS", "aiogram", "Telegram Bots"],
+    technologies: ["React", "TypeScript", "FastAPI", "PostGIS", "aiogram"],
+  },
+  {
+    id: "mimoram",
+    company: "Mimoram · AI startup",
+    current: false,
+    technologies: ["React", "TypeScript", "Python", "FastAPI", "AI"],
   },
   {
     id: "cognilabs",

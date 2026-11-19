@@ -23,7 +23,7 @@ const About = () => {
     ? `const developer = {
   name: "Mirzohid",
   role: "Fullstack dasturchi",
-  company: "Mimoram (UzCombinator)",
+  status: "Freelance",
   stack: ["React", "TypeScript", "FastAPI"],
   available: true
 };`
@@ -31,19 +31,19 @@ const About = () => {
       ? `const developer = {
   name: "Mirzohid",
   role: "Fullstack-разработчик",
-  company: "Mimoram (UzCombinator)",
+  status: "Freelance",
   stack: ["React", "TypeScript", "FastAPI"],
   available: true
 };`
       : `const developer = {
   name: "Mirzohid",
   role: "Fullstack Developer",
-  company: "Mimoram (UzCombinator)",
+  status: "Freelance",
   stack: ["React", "TypeScript", "FastAPI"],
   available: true
 };`;
   const stats = [
-    { value: "2+", label: t.stats[0] },
+    { value: "2.5+", label: t.stats[0] },
     { value: "12+", label: t.stats[1] },
     { value: "20+", label: t.stats[2] },
     { value: "100%", label: t.stats[3] },

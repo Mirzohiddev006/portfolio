@@ -21,11 +21,12 @@ const skillCategories: { key: "frontend" | "backend" | "tools"; color: string; s
     key: "backend",
     color: "#00ffff",
     skills: [
-      { name: "Python / FastAPI", level: 78 },
-      { name: "aiogram (Telegram Bots)", level: 82 },
-      { name: "PostgreSQL / PostGIS", level: 70 },
-      { name: "Node.js / Express", level: 68 },
-      { name: "SQLite", level: 72 },
+      { name: "Fullstack (React + FastAPI)", level: 85 },
+      { name: "Python / FastAPI", level: 82 },
+      { name: "aiogram (Telegram Bots)", level: 84 },
+      { name: "PostgreSQL / PostGIS", level: 74 },
+      { name: "Node.js / Express", level: 70 },
+      { name: "SQLite", level: 74 },
     ],
   },
   {
